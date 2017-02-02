@@ -1,4 +1,4 @@
-// Harry Gleeson - 14455822 - COMP30050 - Assignment 0
+// Harry Gleeson - 14455822 - COMP30050 - Assignment 1
 package Poker;
 
 public class PlayingCard {
