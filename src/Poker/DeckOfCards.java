@@ -28,7 +28,6 @@ public class DeckOfCards {
 		initializeDeck();
 	}
 	
-	
 	void reset(){// Reinitializes deck with all of the cards
 		z=0;
 		x=0;
@@ -71,14 +70,11 @@ public class DeckOfCards {
 		int counter=0;
 		PlayingCard deal;
 		while(counter < 52){ //Deals all of the cards in the deck and prints their toString values before returning the card to be discarded
-		deal = CardDeck.dealNext();
-		System.out.println(deal);
-		CardDeck.returnCard(deal);
-		counter++;
+			deal = CardDeck.dealNext();
+			System.out.println(deal);
+			CardDeck.returnCard(deal);
+			counter++;
 		}
-		System.out.println(CardDeck.dealNext()); //Tests what happens when all cards have been dealt and another one is dealt
-		
-
+		System.out.println(CardDeck.dealNext()); //Tests what happens when all cards have been dealt and another one is dealt		
 	}
-	
 }
