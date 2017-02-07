@@ -11,7 +11,7 @@ public class DeckOfCards {
 	private char[] suits = new char[] {PlayingCard.HEARTS, PlayingCard.DIAMONDS, PlayingCard.CLUBS, PlayingCard.SPADES};
 	private int x=0, i=0, z = 0;
 	
-	public DeckOfCards(){ //Constructor uses loop to create all 52 cards in a deck
+	private void initializeDeck(){
 		while(z<52){ //Iterates through array of PlayingCards and populates it with the 52 cards in a deck 
 			for(i=0; i<13; i++){
 				cards[z] = new PlayingCard(type[i], suits[x], faceValues[i], gameValues[i]);
@@ -23,18 +23,16 @@ public class DeckOfCards {
 			}
 	}
 	
+	public DeckOfCards(){ //Constructor uses loop to create all 52 cards in a deck
+		initializeDeck();
+	}
+	
+	
 	void reset(){// Reinitializes deck with all of the cards
 		z=0;
 		x=0;
-		while(z<52){ //Iterates through array of PlayingCards and populates it with the 52 cards in a deck 
-			for(i=0; i<13; i++){
-				cards[z] = new PlayingCard(type[i], suits[x], faceValues[i], gameValues[i]);
-				arrayIndex[z] = z;
-				z++;
-			}
-			x++;
-			i=0;
-			}
+		initializeDeck();
+		shuffle();
 	}
 	
 	void shuffle(){// Mixes up the cards in the deck by choosing 2 random cards at a time in the deck and swapping their positions
@@ -68,7 +66,7 @@ public class DeckOfCards {
 	
 	public static void main(String[] args) {		
 		DeckOfCards CardDeck = new DeckOfCards();
-		CardDeck.shuffle();
+		CardDeck.reset(); //Resets the deck to ensure all cards are present then shuffles them
 		int counter=0;
 		PlayingCard deal;
 		while(counter < 52){
@@ -78,7 +76,7 @@ public class DeckOfCards {
 		counter++;
 		}
 		System.out.println(CardDeck.dealNext());
-		CardDeck.reset();
+		
 
 	}
 	
