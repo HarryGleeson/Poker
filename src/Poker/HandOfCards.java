@@ -59,10 +59,9 @@ public class HandOfCards {
 			}
 		}
 	     
-		//for(int i=0; i<handCapacity; i++){
-		//	System.out.println(hand[i].toString());
-		//}
-		//System.out.println();
+		for(int i=0; i<handCapacity; i++){
+			System.out.println(hand[i].toString());
+		}
 	}
 	
 	//**For all of the following methods to determine what hand you have, they will check that the hand is not belonging to a stronger hand
