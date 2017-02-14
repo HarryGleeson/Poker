@@ -21,6 +21,14 @@ public class HandOfCards {
 		return deck;
 	}
 	
+	public String handString(){ //Returns the toString representations of the cards in the hand
+		String handString="";
+		for(int i=0; i<handCapacity; i++){
+			handString+=hand[i].toString()+"\n";
+		}
+		return handString;
+	}
+	
 	private boolean sameSuit(){ //Tests if all of the cards in the hand are of the same set, made its own method to remove duplicate code in isRoyalFlush(), isStraightFlush() and isStraight()
 		int i=0;
 		while (i < handCapacity-1){ 
@@ -48,7 +56,7 @@ public class HandOfCards {
 		return true;
 	}
 	
-	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value and prints them in this order. 
+	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value. 
 		for (int i = 0; i < handCapacity-1; i++){
 			for(int j=1;  j < handCapacity-i;  j++ ){
                 if ( hand[j-1].getGameValue() < hand[j].getGameValue()){
@@ -57,10 +65,6 @@ public class HandOfCards {
                         hand[j] = temp;
                 } 
 			}
-		}
-	     
-		for(int i=0; i<handCapacity; i++){
-			System.out.println(hand[i].toString());
 		}
 	}
 	
@@ -204,6 +208,7 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
+		System.out.println(CardHand.handString());
 		boolean rf = CardHand.isRoyalFlush();
 		boolean sf = CardHand.isStraightFlush();
 		boolean fk = CardHand.isFourOfAKind();
