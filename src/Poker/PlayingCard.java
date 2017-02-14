@@ -44,12 +44,12 @@ public class PlayingCard {
 		char[] suits = new char[] {PlayingCard.HEARTS, PlayingCard.DIAMONDS, PlayingCard.CLUBS, PlayingCard.SPADES};
 		int x=0, i, z = 0;
 		while(z<52){ //Iterates through array of PlayingCards and populates it with the 52 cards in a deck 
-		for(i=0; i<13; i++){
-			cards[z] = new PlayingCard(type[i], suits[x], faceValues[i], gameValues[i]);
-			z++;
-		}
-		x++;
-		i=0;
+			for(i=0; i<13; i++){
+				cards[z] = new PlayingCard(type[i], suits[x], faceValues[i], gameValues[i]);
+				z++;
+			}
+			x++;
+			i=0;
 		}
 		
 		for (z=0; z<52; z++){ //Prints the string representation for all cards in the deck

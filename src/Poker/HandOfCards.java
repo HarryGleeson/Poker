@@ -239,7 +239,7 @@ public class HandOfCards {
 		return true;
 	}
 	
-	public static void main(String[] args) 
+	public static void main(String[] args) //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
 	{
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
