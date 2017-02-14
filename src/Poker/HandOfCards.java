@@ -156,16 +156,24 @@ public class HandOfCards {
 		return false;	
 	}
 			
-	public boolean isTwoPair(){ //********************************
+	public boolean isTwoPair(){ //Checks if any of the cards are the same value as the card after them in the hand, if any are, it counts the pair. If the number of pairs in the hand is 2, it returns true as the hand contains 2 pairs
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()){
 			return false;
 		}
 		else{
-			if((hand[0].getFaceValue() == hand[1].getFaceValue()&&(hand[2].getFaceValue() == hand[3].getFaceValue()||hand[3].getFaceValue() == hand[4].getFaceValue()))||hand[1].getFaceValue() == hand[2].getFaceValue()&&hand[3].getFaceValue() == hand[4].getFaceValue()){
+			int u=0, pairCounter=0;
+			while(u+1<handCapacity){
+				if(hand[u].getFaceValue() == hand[u+1].getFaceValue()){
+					pairCounter++;
+					}
+					u++;
+			}	
+			if(pairCounter==2){
 				return true;
 			}
+			else
+				return false;
 		}
-		return false;
 	}
 	
 	public boolean isOnePair(){ //As it cannot return true to any stronger hand, the method only needs to check if any of the cards in the hand have the same value to the one next to it
@@ -192,7 +200,7 @@ public class HandOfCards {
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-		DeckOfCards CardDeck = new DeckOfCards();
+		/*DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		boolean rf = CardHand.isRoyalFlush();
@@ -225,7 +233,7 @@ public class HandOfCards {
 			System.out.println("One Pair");
 		if (hh)
 			System.out.println("High Hand");
-		/*
+		*/
 		int counter = 0;
 		boolean achieved = false;
 		while(!achieved){
@@ -233,11 +241,11 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isOnePair()){
+		if(CardHand.isTwoPair()){
 			achieved=true;
 		}
 		}
-		System.out.println("One Pair! "+counter);
-		*/
+		System.out.println("Two Pair! "+counter);
+		
 	 }
 }
