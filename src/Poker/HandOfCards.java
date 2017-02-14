@@ -9,7 +9,7 @@ public class HandOfCards {
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
 	
-	public HandOfCards(DeckOfCards deck){
+	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them
 		this.deck = deck;
 		for(int i=0; i<handCapacity; i++){
 		hand[i] =deck.dealNext();
@@ -17,11 +17,11 @@ public class HandOfCards {
 		sort();
 	}
 	
-	public DeckOfCards ReturnDeck(){
+	public DeckOfCards ReturnDeck(){ //Public method to access deck
 		return deck;
 	}
 	
-	private boolean sameSet(){ //Tests if all of the cards in the hand are of the same set, made its own method to remove duplicate code
+	private boolean sameSuit(){ //Tests if all of the cards in the hand are of the same set, made its own method to remove duplicate code in isRoyalFlush(), isStraightFlush() and isStraight()
 		int i=0;
 		while (i < handCapacity-1) { 
 			if (hand[i].getSuit() == hand[i+1].getSuit()){
@@ -33,7 +33,7 @@ public class HandOfCards {
 		return true;
 	}
 	
-	private boolean isSequential(){ //Determines if hands in card are sequence of 5 consecutive game values, made its own method to remove duplicate code
+	private boolean isSequential(){ //Determines if hands in card are sequence of 5 consecutive game values, made its own method to remove duplicate code in isStraightFlush() and isStraight()
 		int i=0, j=1, n=0;
 		while(j<handCapacity&&i<handCapacity){
 			if (hand[n].getGameValue()-j == hand[j].getGameValue()){//Checks if cards in hand are consecutive in their game values
@@ -49,7 +49,7 @@ public class HandOfCards {
 	
 	}
 	
-	private void sort(){ //Uses a Bubble sort to sort the cards in order of their game value.
+	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value.
 		for (int i = 0; i < handCapacity-1; i++) {
 		 for(int j=1;  j < handCapacity-i;  j++ )
          {
@@ -68,8 +68,8 @@ public class HandOfCards {
 	System.out.println();
 	}
 	
-	public boolean isRoyalFlush() {
-		boolean set = sameSet();
+	public boolean isRoyalFlush() { //Checks first if all cards in hand are of same set, if they are then checks if the game values are the same as those in a royal flush
+		boolean set = sameSuit(); //Uses sameSuit method to determine if all cards in the hand are in the same suit
 		if (!set){
 			return false;
 		}
@@ -86,8 +86,8 @@ public class HandOfCards {
 		}
 	}
 	
-	public boolean isStraightFlush(){
-		boolean set = sameSet();
+	public boolean isStraightFlush(){ //Checks that hand is not a Royal Flush and if the cards are all of the same suit and are sequential, if one or more of these is not the case then it returns false
+		boolean set = sameSuit();
 		boolean sequential = isSequential();
 		if(isRoyalFlush()||!set||!sequential){
 			return false;
@@ -96,7 +96,7 @@ public class HandOfCards {
 				
 	}
 	
-	public boolean isFourOfAKind() {
+	public boolean isFourOfAKind() { //Compares each card in the sorted hand to the card 3 indexes away from it. As the array is sorted, cards with a common face value will be beside each other so if a cards face value is equal to that of the cards 3 away from it, there are 4 cards of the same value in the hand
 		if(isRoyalFlush()||isStraightFlush()){
 			return false;
 		}
@@ -104,7 +104,7 @@ public class HandOfCards {
 		else{
 			int u=0;
 				while(u+3<handCapacity){
-				if(hand[u].getFaceValue() == hand[u+3].getFaceValue()){ //Array is sorted already so cards with same face value automatically beside each other. Meaning if a card has the same face value as one 3 away from it there are 4 of a kind
+				if(hand[u].getFaceValue() == hand[u+3].getFaceValue()){ //Compares card's face value to face value of card 3 indexes away from it in the hand
 					return true;
 				}
 				u++;
@@ -114,7 +114,7 @@ public class HandOfCards {
 		}
 		
 	
-	public boolean isFullHouse() {
+	public boolean isFullHouse() {//*********************************
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()){
 			return false;
 		}
@@ -130,15 +130,15 @@ public class HandOfCards {
 			return false;
 		}
 	
-	public boolean isFlush() {
-		boolean set = sameSet();
+	public boolean isFlush() { //Checks that all cards in hand are of same suit and does not fall into any of stronger hands from above. If they are all of same set and its not a stronger hand, return true
+		boolean set = sameSuit();
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||!set){
 			return false;
 		}
 		return true;
 		}
 	
-	public boolean isStraight(){
+	public boolean isStraight(){ //Checks that all cards in hand are of sequential and does not fall into any of stronger hands from above. If they are sequential and its not a stronger hand, return true
 		boolean sequential = isSequential();
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||!sequential){
 			return false;
@@ -147,14 +147,14 @@ public class HandOfCards {
 		
 		}
 	
-	public boolean isThreeOfAKind(){
+	public boolean isThreeOfAKind(){//Compares each card in the sorted hand to the card 2 indexes away from it. As the array is sorted, cards with a common face value will be beside each other so if a cards face value is equal to that of the cards 2 away from it, there are 3 cards of the same value in the hand
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()){
 			return false;
 		}
 		else{
 			int u=0;
 			while(u+2<handCapacity){
-				if(hand[u].getFaceValue() == hand[u+2].getFaceValue()){ //Array is sorted already so cards with same face value automatically beside each other. Meaning if the first and fourth or second and fifth values are the same there are 4 of a kind.
+				if(hand[u].getFaceValue() == hand[u+2].getFaceValue()){ //Compares card's face value to face value of card 2 indexes away from it in the hand
 					return true;
 				}
 				u++;
@@ -165,7 +165,7 @@ public class HandOfCards {
 		
 	}
 			
-	public boolean isTwoPair(){
+	public boolean isTwoPair(){//********************************
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()){
 			return false;
 		}
@@ -177,7 +177,7 @@ public class HandOfCards {
 		return false;
 	}
 	
-	public boolean isOnePair() {
+	public boolean isOnePair() {//*****************************
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()||isTwoPair()){
 			return false;
 		}
@@ -189,7 +189,7 @@ public class HandOfCards {
 		return false;
 	}
 	
-	public boolean isHighHand(){
+	public boolean isHighHand(){ //If none of the other hands return true meaning the hand belongs to no stringer hand, isHighHand() returns true
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()||isTwoPair()||isOnePair()){
 			return false;
 		}
