@@ -4,7 +4,8 @@ package Poker;
 public class HandOfCards {
 	private int handCapacity = 5;
 	private PlayingCard[] hand = new PlayingCard[handCapacity];
-	private int[] royalFlushGameValue = new int[]{14, 13, 12, 11, 10};
+	private int[] royalFlushGameValue = new int[]{14, 13, 12, 11, 10}; //To allow to see if game values correspond to that of a royal flush
+	private int[] wrappedStraightGameValue = new int[]{14, 5, 4, 3, 2}; //To allow for comparison of special straight case A,2,3,4,5
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
 	
@@ -33,15 +34,16 @@ public class HandOfCards {
 	}
 	
 	private boolean isSequential(){ //Determines if hands in card are sequence of 5 consecutive game values, made its own method to remove duplicate code
-		int i=0, j=1;
-		while(j<handCapacity){
-			//***DONT HAVE SORTED FOR A,2,3,4,5*****
-			if (hand[i].getGameValue()-j == hand[j].getGameValue()){//Checks if cards in hand are consecutive in their game values
+		int i=0, j=1, n=0;
+		while(j<handCapacity&&i<handCapacity){
+			if (hand[n].getGameValue()-j == hand[j].getGameValue()){//Checks if cards in hand are consecutive in their game values
 				j++;
 			}
-			else{
-				return false;
+			else if(hand[i].getGameValue() == wrappedStraightGameValue[i]){ //Checks for case of straight A,2,3,4,5 where game values are not sequential
+				i++;
 			} 
+			else
+				return false;
 		}
 		return true;
 	
@@ -136,7 +138,7 @@ public class HandOfCards {
 		return true;
 		}
 	
-	public boolean isStraight(){ //**NEED TO ADAPT FOR OTHER FLUSHES EG Q,K,A,2,3***
+	public boolean isStraight(){
 		boolean sequential = isSequential();
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||!sequential){
 			return false;
@@ -162,8 +164,7 @@ public class HandOfCards {
 	return false;
 		
 	}
-		
-	
+			
 	public boolean isTwoPair(){
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()){
 			return false;
@@ -230,6 +231,20 @@ public class HandOfCards {
 		System.out.println("One Pair");
 		if (hh)
 		System.out.println("High Hand");
+		
+		/*int counter = 0;
+		boolean achieved = false;
+		while(!achieved){
+			counter++;
+		DeckOfCards CardDeck = new DeckOfCards();
+		CardDeck.shuffle();
+		HandOfCards CardHand = new HandOfCards(CardDeck);
+		if(CardHand.isStraight()){
+			achieved=true;
+		}
+		}
+		System.out.println("Straight! "+counter);
+		*/
 	 }
 			
 	
