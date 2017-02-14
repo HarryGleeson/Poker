@@ -48,7 +48,7 @@ public class HandOfCards {
 		return true;
 	}
 	
-	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value. 
+	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value and prints them in this order. 
 		for (int i = 0; i < handCapacity-1; i++){
 			for(int j=1;  j < handCapacity-i;  j++ ){
                 if ( hand[j-1].getGameValue() < hand[j].getGameValue()){
@@ -64,7 +64,7 @@ public class HandOfCards {
 		}
 	}
 	
-	//**For all of the following methods to determine what hand you have, they will check that the hand is not belonging to a stronger hand
+	//****For all of the following methods to determine what hand you have, they will check that the hand is not belonging to a stronger hand
 	
 	public boolean isRoyalFlush(){  //Checks first if all cards in hand are of same set, if they are then checks if the game values are the same as those in a royal flush
 		boolean set = sameSuit(); //Uses sameSuit method to determine if all cards in the hand are in the same suit
