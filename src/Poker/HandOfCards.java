@@ -17,7 +17,7 @@ public class HandOfCards {
 		sort();
 	}
 	
-	public DeckOfCards ReturnDeck(){  //Public method to access deck
+	public DeckOfCards ReturnDeck(){  //Public method to return deck
 		return deck;
 	}
 	
@@ -59,11 +59,13 @@ public class HandOfCards {
 			}
 		}
 	     
-		for(int i=0; i<handCapacity; i++){
-			System.out.println(hand[i].toString());
-		}
-		System.out.println();
+		//for(int i=0; i<handCapacity; i++){
+		//	System.out.println(hand[i].toString());
+		//}
+		//System.out.println();
 	}
+	
+	//**For all of the following methods to determine what hand you have, they will check that the hand is not belonging to a stronger hand
 	
 	public boolean isRoyalFlush(){  //Checks first if all cards in hand are of same set, if they are then checks if the game values are the same as those in a royal flush
 		boolean set = sameSuit(); //Uses sameSuit method to determine if all cards in the hand are in the same suit
@@ -83,7 +85,7 @@ public class HandOfCards {
 		}
 	}
 	
-	public boolean isStraightFlush(){  //Checks that hand is not a Royal Flush and if the cards are all of the same suit and are sequential, if one or more of these is not the case then it returns false
+	public boolean isStraightFlush(){  //This method checks if the cards are all of the same suit and are sequential, if one or more of these is not the case then it returns false
 		boolean set = sameSuit();
 		boolean sequential = isSequential();
 		if(isRoyalFlush()||!set||!sequential){
@@ -108,7 +110,7 @@ public class HandOfCards {
 		return false;
 	}
 		
-	public boolean isFullHouse(){ //*********************************
+	public boolean isFullHouse(){ //Checks if either the first two and last 3 or first 3 and last 2 cards are the same. If they are, the hand is a full house
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()){
 			return false;
 		}	
@@ -124,7 +126,7 @@ public class HandOfCards {
 		return false;
 	}
 	
-	public boolean isFlush(){ //Checks that all cards in hand are of same suit and does not fall into any of stronger hands from above. If they are all of same set and its not a stronger hand, return true 
+	public boolean isFlush(){ //Checks that all cards in hand are of same suit. If they are all of same set and its not a stronger hand, return true 
 		boolean set = sameSuit();
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||!set){
 			return false;
@@ -132,7 +134,7 @@ public class HandOfCards {
 		return true;
 	}
 	
-	public boolean isStraight(){ //Checks that all cards in hand are of sequential and does not fall into any of stronger hands from above. If they are sequential and its not a stronger hand, return true 
+	public boolean isStraight(){ //Checks that all cards in hand are of sequential. If they are sequential and its not a stronger hand, return true 
 		boolean sequential = isSequential();
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||!sequential){
 			return false;
@@ -200,7 +202,7 @@ public class HandOfCards {
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-		/*DeckOfCards CardDeck = new DeckOfCards();
+		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		boolean rf = CardHand.isRoyalFlush();
@@ -233,19 +235,5 @@ public class HandOfCards {
 			System.out.println("One Pair");
 		if (hh)
 			System.out.println("High Hand");
-		*/
-		int counter = 0;
-		boolean achieved = false;
-		while(!achieved){
-			counter++;
-		DeckOfCards CardDeck = new DeckOfCards();
-		CardDeck.shuffle();
-		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isTwoPair()){
-			achieved=true;
-		}
-		}
-		System.out.println("Two Pair! "+counter);
-		
-	 }
+	}
 }
