@@ -62,6 +62,7 @@ public class HandOfCards {
 		for(int i=0; i<handCapacity; i++){
 			System.out.println(hand[i].toString());
 		}
+		System.out.println();
 	}
 	
 	public boolean isRoyalFlush(){  //Checks first if all cards in hand are of same set, if they are then checks if the game values are the same as those in a royal flush
@@ -167,19 +168,21 @@ public class HandOfCards {
 		return false;
 	}
 	
-	public boolean isOnePair(){ //*****************************
-	
+	public boolean isOnePair(){ //As it cannot return true to any stronger hand, the method only needs to check if any of the cards in the hand have the same value to the one next to it
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()||isTwoPair()){
 			return false;
 		}
-		else
-		{
-			if(hand[0].getFaceValue() == hand[1].getFaceValue()||hand[1].getFaceValue() == hand[2].getFaceValue()||hand[2].getFaceValue() == hand[3].getFaceValue()||hand[3].getFaceValue() == hand[4].getFaceValue()){
-				return true;
+		else{
+			int u=0;
+			while(u+1<handCapacity){
+				if(hand[u].getFaceValue() == hand[u+1].getFaceValue()){
+					return true;
+				}
+				u++;
 			}
-		}
 		return false;
-	}
+		}
+	}	
 	
 	public boolean isHighHand(){ //If none of the other hands return true meaning the hand belongs to no stringer hand, isHighHand() returns true
 		if(isRoyalFlush()||isStraightFlush()||isFourOfAKind()||isFullHouse()||isFlush()||isStraight()||isThreeOfAKind()||isTwoPair()||isOnePair()){	
@@ -222,19 +225,19 @@ public class HandOfCards {
 			System.out.println("One Pair");
 		if (hh)
 			System.out.println("High Hand");
-		
-		/*int counter = 0;
+		/*
+		int counter = 0;
 		boolean achieved = false;
 		while(!achieved){
 			counter++;
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isStraight()){
+		if(CardHand.isOnePair()){
 			achieved=true;
 		}
 		}
-		System.out.println("Straight! "+counter);
+		System.out.println("One Pair! "+counter);
 		*/
 	 }
 }
