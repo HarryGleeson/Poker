@@ -222,28 +222,35 @@ public class HandOfCards {
 			gameValue = HandOfCards.ROYAL_FLUSH_DEFAULT;
 		}
 		else if(isStraightFlush()){
-			gameValue = HandOfCards.STRAIGHT_FLUSH_DEFAULT;
+			gameValue = HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[1].getGameValue();//Adds second card game value because of the case with A,2,3,4,5 if first card compared would give misleading result
 		}
 		else if(isFourOfAKind()){
-			gameValue = HandOfCards.FOUR_OF_A_KIND_DEFAULT;
+			gameValue = HandOfCards.FOUR_OF_A_KIND_DEFAULT+hand[1].getGameValue();//The second card in the hand is guaranteed to be part of the four of a kind so its value can separate 2 fourOfAKind hands
 		}
 		else if(isFullHouse()){
-			gameValue = HandOfCards.FULL_HOUSE_DEFAULT;
+			gameValue = HandOfCards.FULL_HOUSE_DEFAULT+hand[2].getGameValue();//To separate full houses, the hand with the higher three of a kind wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
 		}
 		else if(isFlush()){
-			gameValue = HandOfCards.FLUSH_DEFAULT;
+			gameValue = HandOfCards.FLUSH_DEFAULT+hand[0].getGameValue();//The highest card in the flush wins in the case of 2 flushes so its value is added on
 		}
 		else if(isStraight()){
-			gameValue = HandOfCards.STRAIGHT_DEFAULT;
+			gameValue = HandOfCards.STRAIGHT_DEFAULT+hand[0].getGameValue();//The highest card in the straight wins in the case of 2 straights so its value is added on
 		}
 		else if(isThreeOfAKind()){
-			gameValue = HandOfCards.THREE_OF_A_KIND_DEFAULT;
+			gameValue = HandOfCards.THREE_OF_A_KIND_DEFAULT+hand[2].getGameValue();//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
 		}
 		else if(isTwoPair()){
-			gameValue = HandOfCards.TWO_PAIR_DEFAULT;
+			gameValue = HandOfCards.TWO_PAIR_DEFAULT+hand[1].getGameValue();//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added.
 		}
 		else if(isOnePair()){
-			gameValue = HandOfCards.ONE_PAIR_DEFAULT;
+			int u=0;
+			while(u+1<handCapacity){
+				if(hand[u].getGameValue() == hand[u+1].getGameValue()){
+					gameValue = HandOfCards.ONE_PAIR_DEFAULT+hand[u].getGameValue();//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+				}
+				u++;
+			}
+			
 		}
 		else if(isHighHand()){
 			gameValue = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue();
