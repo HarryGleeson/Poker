@@ -1,3 +1,4 @@
+// Harry Gleeson - 14455822 - COMP30050 - Assignment 3
 package Poker;
 
 
@@ -8,6 +9,17 @@ public class HandOfCards {
 	private int[] wrappedStraightGameValue = new int[]{14, 5, 4, 3, 2}; //To allow for comparison of special straight case A,2,3,4,5
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
+	static final int HIGH_HAND_DEFAULT = 0;
+	static final int ONE_PAIR_DEFAULT = 10000;
+	static final int TWO_PAIR_DEFAULT = 20000;
+	static final int THREE_OF_A_KIND_DEFAULT = 30000;
+	static final int STRAIGHT_DEFAULT = 40000;
+	static final int FLUSH_DEFAULT = 50000;
+	static final int FULL_HOUSE_DEFAULT = 60000;
+	static final int FOUR_OF_A_KIND_DEFAULT = 70000;
+	static final int STRAIGHT_FLUSH_DEFAULT = 80000;
+	static final int ROYAL_FLUSH_DEFAULT = 90000;
+	
 	
 	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them 
 		this.deck = deck;
@@ -204,6 +216,42 @@ public class HandOfCards {
 		return true;
 	}
 	
+	public int getGameValue(){
+		int gameValue=0;
+		if(isRoyalFlush()){
+			gameValue = HandOfCards.ROYAL_FLUSH_DEFAULT;
+		}
+		else if(isStraightFlush()){
+			gameValue = HandOfCards.STRAIGHT_FLUSH_DEFAULT;
+		}
+		else if(isFourOfAKind()){
+			gameValue = HandOfCards.FOUR_OF_A_KIND_DEFAULT;
+		}
+		else if(isFullHouse()){
+			gameValue = HandOfCards.FULL_HOUSE_DEFAULT;
+		}
+		else if(isFlush()){
+			gameValue = HandOfCards.FLUSH_DEFAULT;
+		}
+		else if(isStraight()){
+			gameValue = HandOfCards.STRAIGHT_DEFAULT;
+		}
+		else if(isThreeOfAKind()){
+			gameValue = HandOfCards.THREE_OF_A_KIND_DEFAULT;
+		}
+		else if(isTwoPair()){
+			gameValue = HandOfCards.TWO_PAIR_DEFAULT;
+		}
+		else if(isOnePair()){
+			gameValue = HandOfCards.ONE_PAIR_DEFAULT;
+		}
+		else if(isHighHand()){
+			gameValue = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue();
+		}
+		
+		return gameValue;
+	}
+	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
@@ -239,5 +287,48 @@ public class HandOfCards {
 			System.out.println("One Pair");
 		if (hh)
 			System.out.println("High Hand");
+		System.out.println("Game Value: "+CardHand.getGameValue()+"\n");
+		
+		HandOfCards CardHand1 = new HandOfCards(CardDeck);
+		System.out.println(CardHand1.handString());
+		boolean rf1 = CardHand1.isRoyalFlush();
+		boolean sf1 = CardHand1.isStraightFlush();
+		boolean fk1 = CardHand1.isFourOfAKind();
+		boolean fh1 = CardHand1.isFullHouse();
+		boolean fl1 = CardHand1.isFlush();
+		boolean st1 = CardHand1.isStraight();
+		boolean tk1 = CardHand1.isThreeOfAKind();
+		boolean tp1 = CardHand1.isTwoPair();
+		boolean op1 = CardHand1.isOnePair();
+		boolean hh1 = CardHand1.isHighHand();
+		if (rf1)
+			System.out.println("Royal Flush");
+		if (sf1)
+			System.out.println("Straight Flush");
+		if (fk1)
+			System.out.println("Four Of A Kind");
+		if (fh1)
+			System.out.println("Full House");
+		if (fl1)
+			System.out.println("Flush");
+		if (st1)
+			System.out.println("Straight");
+		if (tk1)
+			System.out.println("Three Of A Kind");
+		if (tp1)
+			System.out.println("Two Pair");
+		if (op1)
+			System.out.println("One Pair");
+		if (hh1)
+			System.out.println("High Hand");
+		System.out.println("Game Value: "+CardHand1.getGameValue());
+		if (CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println("CardHand wins");
+		}
+		else if (CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("CardHand1 wins");
+		}
+		else
+			System.out.println("Split pot. Game Values: "+CardHand.getGameValue());
 	}
 }
