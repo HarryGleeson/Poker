@@ -238,11 +238,16 @@ public class HandOfCards {
 			else
 				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[2].getGameValue(), 4)+hand[1].getGameValue());
 		}
-		else if(isStraight()){
-			gameValue = (int) (HandOfCards.STRAIGHT_DEFAULT+pow(hand[0].getGameValue(), 3));//The highest card in the straight wins in the case of 2 straights so its value is added on, if 2 hands have the same first card in a straight, the pot is split
-			if(hand[2].getGameValue()!=hand[3].getGameValue()){//Means that the non-three of a kind cards are in hand[3] and hand[4]
-				
+		else if(isFlush()){//To separate 2 flushes look at highest card in both flushes. If both have same high card, move to next highest. Formula = HandOfCards.FLUSH_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
+			int j=5;
+			gameValue = HandOfCards.FLUSH_DEFAULT;
+			for(int i=0; i<handCapacity; i++){
+				gameValue += (int) pow(hand[i].getGameValue(), j);
+				j--;
 			}
+		}
+		else if(isStraight()){//Formula = HandOfCards.STRAIGHT_DEFAULT+hand[1].getGameValue
+			gameValue = (int) (HandOfCards.STRAIGHT_DEFAULT+hand[1].getGameValue());//The highest card in the straight wins in the case of 2 straights. I have used the second highest card in the hand to separate 2 straights instead of the first card as in the case of A,2,3,4,5, the result would be incorrect. So the game value of the second card in the hand is added on, if 2 hands have the same second card in a straight, the pot is split
 		}
 		else if(isThreeOfAKind()){
 			gameValue = (int) (HandOfCards.THREE_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3));//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
@@ -381,13 +386,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isThreeOfAKind()){
+		if(CardHand.isFlush()){
 			System.out.println(CardHand.handString());
-			System.out.println("Game value:"+(CardHand.getGameValue()-THREE_OF_A_KIND_DEFAULT));
+			System.out.println("Game value:"+(CardHand.getGameValue()-FLUSH_DEFAULT));
 			achieved=true;
 		}
 		}
-		System.out.println("Three of a kind! "+counter);
+		System.out.println("Flush! "+counter);
 		
 		counter = 0;
 		achieved = false;
@@ -396,13 +401,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isThreeOfAKind()){
+		if(CardHand.isFlush()){
 			System.out.println(CardHand.handString());
-			System.out.println("Game value:"+(CardHand.getGameValue()-THREE_OF_A_KIND_DEFAULT));
+			System.out.println("Game value:"+(CardHand.getGameValue()-FLUSH_DEFAULT));
 			achieved=true;
 		}
 		}
 		
-		System.out.println("Three of a kind! "+counter);
+		System.out.println("Flush! "+counter);
 	}
 }
