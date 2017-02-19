@@ -221,17 +221,17 @@ public class HandOfCards {
 		if(isRoyalFlush()){
 			gameValue = HandOfCards.ROYAL_FLUSH_DEFAULT;
 		}
-		else if(isStraightFlush()){
+		else if(isStraightFlush()){//Formula =  HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[1].getGameValue
 			gameValue = HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[1].getGameValue();//Adds second card game value because of the case with A,2,3,4,5 if first card compared would give misleading result
 		}
-		else if(isFourOfAKind()){
+		else if(isFourOfAKind()){//If 2 hands have 4 of a kind, they are separated by the non four of a kind card in the hand. Formula = HandOfCards.FOUR_OF_A_KIND_DEFAULT+(game value of four of a kind)^3+(game value of non four of a kind card)
 			if(hand[2].getGameValue()==hand[0].getGameValue()){//This checks the location of the non four of a kind card, if this is true, the non matching card is the last card in the hand so the game value of it is added to the game value to separate in case 2 hands have the same 4 of a kind
 				gameValue = (int) (HandOfCards.FOUR_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3)+hand[4].getGameValue());//The second card in the hand is guaranteed to be part of the four of a kind so its value can separate 2 fourOfAKind hands, then the value of the other card is added on to determine a winner in the case of 2 identical 4 of a kinds
 			}
 			else//In this case, the non four of a kind card is the first card in the hand and its game value is added to the four of a kind's value cubed
 				gameValue = (int) (HandOfCards.FOUR_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3)+hand[0].getGameValue());
-		}	
-		else if(isFullHouse()){//To separate 2 full houses, the full house with the higher three of a kind wins. The third card in the hand, hand[2] is guaranteed to be in the 3 of a kind.
+		}
+		else if(isFullHouse()){//To separate 2 full houses, the full house with the higher three of a kind wins. The third card in the hand, hand[2] is guaranteed to be in the 3 of a kind. Formula = HandOfCards.FULL_HOUSE_DEFAULT+ (face value of three of a kind)^4+(face value of pair)
 			if(hand[2].getGameValue()==hand[1].getGameValue()){//This checks the location of the pair, if this is true, the pair is the last 2 cards in the hand so the game value of them is added to the game value to separate in case 2 hands have the same 3 of a kind in their full houses
 				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[2].getGameValue(), 4)+hand[3].getGameValue());
 			}
@@ -249,7 +249,7 @@ public class HandOfCards {
 		else if(isStraight()){//Formula = HandOfCards.STRAIGHT_DEFAULT+hand[1].getGameValue
 			gameValue = (int) (HandOfCards.STRAIGHT_DEFAULT+hand[1].getGameValue());//The highest card in the straight wins in the case of 2 straights. I have used the second highest card in the hand to separate 2 straights instead of the first card as in the case of A,2,3,4,5, the result would be incorrect. So the game value of the second card in the hand is added on, if 2 hands have the same second card in a straight, the pot is split
 		}
-		else if(isThreeOfAKind()){
+		else if(isThreeOfAKind()){//Formula = HandOfCards.THREE_OF_A_KIND_DEFAULT + (game value of three of a kind)^3 + (game value of of higher non-three of a kind card)^2 + game value of lower non-three of a kind card
 			gameValue = (int) (HandOfCards.THREE_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3));//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
 			if(hand[2].getGameValue()!=hand[3].getGameValue()){//Means that the non-three of a kind cards are in hand[3] and hand[4]
 				gameValue+=pow(hand[3].getGameValue(), 2)+hand[4].getGameValue();
@@ -260,7 +260,7 @@ public class HandOfCards {
 			else//Otherwise the non three of a kind cards are in hand[0] and hand[4]
 				gameValue+=pow(hand[0].getGameValue(), 2)+hand[4].getGameValue();
 		}
-		else if(isTwoPair()){
+		else if(isTwoPair()){//Formula = HandOfCards.TWO_PAIR_DEFAULT + (higher pair game value)^3 + (lower pair game value)^2 + non-pair card game value
 			gameValue = (int) (HandOfCards.TWO_PAIR_DEFAULT+pow(hand[1].getGameValue(),3)+pow(hand[3].getGameValue(),2));//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added, and the fourth card in the hand is guaranteed to be part of the lower of the 2 pairs. Then if the 2 sets of 2 pairs are the same, the outlier card's value is added. The face value of the highest pair is weighted highest, followed by the lower pair then the outlier
 			if(hand[0].getGameValue()!=hand[1].getGameValue()){//Means non pair card is hand[0]
 				gameValue+=hand[0].getGameValue();
@@ -272,7 +272,7 @@ public class HandOfCards {
 				gameValue+=hand[4].getGameValue();
 
 		}
-		else if(isOnePair()){
+		else if(isOnePair()){//Formula = HandOfCards.ONE_PAIR_DEFAULT + (game value of pair * 3)^4 + (game value highest non pair card)^3 + (game value of second lowest non pair card)^2 + game value of lowest non pair card
 			int u=0;
 			while(u+1<handCapacity){
 				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. These statements weight the cards from the pair being the heaviest weighted to the lowest card outside the hand to enable hands with a common pair to be separated.
@@ -291,8 +291,13 @@ public class HandOfCards {
 				u++;
 			}
 		}
-		else if(isHighHand()){
-			gameValue = (int) (HandOfCards.HIGH_HAND_DEFAULT+pow(hand[0].getGameValue(), 5)+pow(hand[1].getGameValue(), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());//In the case two hands have the same high hands, the rest of the hand is gone through to separate them. This weights the hand appropriately from highest card to lowest in order to separate two high hands
+		else if(isHighHand()){//In the case two hands have the same high hands, the rest of the hand is gone through to separate them. This weights the hand appropriately from highest card to lowest in order to separate two high hands. Formula = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
+			int j=5;
+			gameValue = HandOfCards.HIGH_HAND_DEFAULT;
+			for(int i=0; i<handCapacity; i++){
+				gameValue += (int) pow(hand[i].getGameValue(), j);
+				j--;
+			}
 		}
 		
 		return gameValue;
