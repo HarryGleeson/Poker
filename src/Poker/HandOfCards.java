@@ -246,20 +246,29 @@ public class HandOfCards {
 			gameValue = HandOfCards.THREE_OF_A_KIND_DEFAULT+hand[2].getGameValue();//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
 		}
 		else if(isTwoPair()){
-			gameValue = HandOfCards.TWO_PAIR_DEFAULT+hand[1].getGameValue();//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added.
+			gameValue = (int) (HandOfCards.TWO_PAIR_DEFAULT+pow(hand[1].getGameValue(),3)+pow(hand[3].getGameValue(),2));//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added, and the fourth card in the hand is guaranteed to be part of the lower of the 2 pairs. Then if the 2 sets of 2 pairs are the same, the outlier card's value is added. The face value of the highest pair is weighted highest, followed by the lower pair then the outlier
+			if(hand[0].getGameValue()!=hand[1].getGameValue()){//Means non pair card is hand[0]
+				gameValue+=hand[0].getGameValue();
+			}
+			else if(hand[1].getGameValue()!=hand[2].getGameValue()&&hand[2].getGameValue()!=hand[3].getGameValue()){//Means non pair card is hand[2]
+				gameValue+=hand[2].getGameValue();
+			}
+			else//Otherwise the non pair card is hand[4]
+				gameValue+=hand[4].getGameValue();
+
 		}
 		else if(isOnePair()){
 			int u=0;
 			while(u+1<handCapacity){
-				if(hand[u].getGameValue() == hand[u+1].getGameValue()){
+				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. These statements weight the cards from the pair being the heaviest weighted to the lowest card outside the hand to enable hands with a common pair to be separated.
 					if(u+1==1){
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
 					}
 					else if(u+1==2){
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
 					}
 					else if(u+1==3){
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[4].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[4].getGameValue());
 					}
 					else
 						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[2].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
@@ -364,13 +373,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isOnePair()){
+		if(CardHand.isTwoPair()){
 			System.out.println(CardHand.handString());
 			System.out.println("Game value:"+CardHand.getGameValue());
 			achieved=true;
 		}
 		}
-		System.out.println("One Pair! "+counter);
+		System.out.println("Two Pair! "+counter);
 		
 		counter = 0;
 		achieved = false;
@@ -379,13 +388,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isOnePair()){
+		if(CardHand.isTwoPair()){
 			System.out.println(CardHand.handString());
 			System.out.println("Game value:"+CardHand.getGameValue());
 			achieved=true;
 		}
 		}
 		
-		System.out.println("One Pair! "+counter);
+		System.out.println("Two Pair! "+counter);
 	}
 }
