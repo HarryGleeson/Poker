@@ -10,15 +10,15 @@ public class HandOfCards {
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
 	static final int HIGH_HAND_DEFAULT = 0;
-	static final int ONE_PAIR_DEFAULT = 1000000;
-	static final int TWO_PAIR_DEFAULT = 2000000;
-	static final int THREE_OF_A_KIND_DEFAULT = 3000000;
-	static final int STRAIGHT_DEFAULT = 4000000;
-	static final int FLUSH_DEFAULT = 5000000;
-	static final int FULL_HOUSE_DEFAULT = 6000000;
-	static final int FOUR_OF_A_KIND_DEFAULT = 7000000;
-	static final int STRAIGHT_FLUSH_DEFAULT = 8000000;
-	static final int ROYAL_FLUSH_DEFAULT = 9000000;
+	static final int ONE_PAIR_DEFAULT = 10000000;
+	static final int TWO_PAIR_DEFAULT = 20000000;
+	static final int THREE_OF_A_KIND_DEFAULT = 30000000;
+	static final int STRAIGHT_DEFAULT = 40000000;
+	static final int FLUSH_DEFAULT = 50000000;
+	static final int FULL_HOUSE_DEFAULT = 60000000;
+	static final int FOUR_OF_A_KIND_DEFAULT = 70000000;
+	static final int STRAIGHT_FLUSH_DEFAULT = 80000000;
+	static final int ROYAL_FLUSH_DEFAULT = 90000000;
 	
 	
 	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them 
@@ -252,14 +252,25 @@ public class HandOfCards {
 			int u=0;
 			while(u+1<handCapacity){
 				if(hand[u].getGameValue() == hand[u+1].getGameValue()){
-					gameValue = HandOfCards.ONE_PAIR_DEFAULT+hand[u].getGameValue();//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+					if(u+1==1){
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+					}
+					else if(u+1==2){
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+					}
+					else if(u+1==3){
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[4].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+					}
+					else
+						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[2].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
 				}
+					
 				u++;
 			}
 			
 		}
 		else if(isHighHand()){
-			gameValue = (int) (HandOfCards.HIGH_HAND_DEFAULT+pow(hand[0].getGameValue(), 5)+pow(hand[1].getGameValue(), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
+			gameValue = (int) (HandOfCards.HIGH_HAND_DEFAULT+pow(hand[0].getGameValue(), 5)+pow(hand[1].getGameValue(), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());//In the case two hands have the same high hands, the rest of the hand is gone through to separate them. This weights the hand appropriately from highest card to lowest in order to separate two high hands
 		}
 		
 		return gameValue;
@@ -353,13 +364,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isHighHand()){
+		if(CardHand.isOnePair()){
 			System.out.println(CardHand.handString());
 			System.out.println("Game value:"+CardHand.getGameValue());
 			achieved=true;
 		}
 		}
-		System.out.println("HighHand! "+counter);
+		System.out.println("One Pair! "+counter);
 		
 		counter = 0;
 		achieved = false;
@@ -368,13 +379,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isHighHand()){
+		if(CardHand.isOnePair()){
 			System.out.println(CardHand.handString());
 			System.out.println("Game value:"+CardHand.getGameValue());
 			achieved=true;
 		}
 		}
 		
-		System.out.println("High Hand! "+counter);
+		System.out.println("One Pair! "+counter);
 	}
 }
