@@ -10,15 +10,15 @@ public class HandOfCards {
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
 	static final int HIGH_HAND_DEFAULT = 0;
-	static final int ONE_PAIR_DEFAULT = 100000;
-	static final int TWO_PAIR_DEFAULT = 200000;
-	static final int THREE_OF_A_KIND_DEFAULT = 300000;
-	static final int STRAIGHT_DEFAULT = 400000;
-	static final int FLUSH_DEFAULT = 500000;
-	static final int FULL_HOUSE_DEFAULT = 600000;
-	static final int FOUR_OF_A_KIND_DEFAULT = 700000;
-	static final int STRAIGHT_FLUSH_DEFAULT = 800000;
-	static final int ROYAL_FLUSH_DEFAULT = 900000;
+	static final int ONE_PAIR_DEFAULT = 1000000;
+	static final int TWO_PAIR_DEFAULT = 2000000;
+	static final int THREE_OF_A_KIND_DEFAULT = 3000000;
+	static final int STRAIGHT_DEFAULT = 4000000;
+	static final int FLUSH_DEFAULT = 5000000;
+	static final int FULL_HOUSE_DEFAULT = 6000000;
+	static final int FOUR_OF_A_KIND_DEFAULT = 7000000;
+	static final int STRAIGHT_FLUSH_DEFAULT = 8000000;
+	static final int ROYAL_FLUSH_DEFAULT = 9000000;
 	
 	
 	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them 
@@ -239,7 +239,8 @@ public class HandOfCards {
 				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[2].getGameValue(), 4)+hand[1].getGameValue());
 		}
 		else if(isStraight()){
-			gameValue = HandOfCards.STRAIGHT_DEFAULT+hand[0].getGameValue();//The highest card in the straight wins in the case of 2 straights so its value is added on
+			
+			gameValue = HandOfCards.STRAIGHT_DEFAULT+hand[0].getGameValue();//The highest card in the straight wins in the case of 2 straights so its value is added on, if 2 hands have the same first card in a straight, the pot is split
 		}
 		else if(isThreeOfAKind()){
 			gameValue = HandOfCards.THREE_OF_A_KIND_DEFAULT+hand[2].getGameValue();//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
@@ -258,7 +259,7 @@ public class HandOfCards {
 			
 		}
 		else if(isHighHand()){
-			gameValue = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue();
+			gameValue = (int) (HandOfCards.HIGH_HAND_DEFAULT+pow(hand[0].getGameValue(), 5)+pow(hand[1].getGameValue(), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
 		}
 		
 		return gameValue;
@@ -352,13 +353,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isFourOfAKind()){
+		if(CardHand.isHighHand()){
 			System.out.println(CardHand.handString());
 			System.out.println("Game value:"+CardHand.getGameValue());
 			achieved=true;
 		}
 		}
-		System.out.println("Four of a kind! "+counter);
+		System.out.println("HighHand! "+counter);
 		
 		counter = 0;
 		achieved = false;
@@ -367,13 +368,13 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isFourOfAKind()){
+		if(CardHand.isHighHand()){
 			System.out.println(CardHand.handString());
 			System.out.println("Game value:"+CardHand.getGameValue());
 			achieved=true;
 		}
 		}
 		
-		System.out.println("Four Of A Kind! "+counter);
+		System.out.println("High Hand! "+counter);
 	}
 }
