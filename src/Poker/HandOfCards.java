@@ -36,7 +36,7 @@ public class HandOfCards {
 	public String handString(){ //Returns the toString representations of the cards in the hand
 		String handString="";
 		for(int i=0; i<handCapacity; i++){
-			handString+=hand[i].toString()+"\n";
+			handString+=hand[i].toString()+" ,";
 		}
 		return handString;
 	}
@@ -275,18 +275,19 @@ public class HandOfCards {
 		else if(isOnePair()){//Formula = HandOfCards.ONE_PAIR_DEFAULT + (game value of pair * 3)^4 + (game value highest non pair card)^3 + (game value of second lowest non pair card)^2 + game value of lowest non pair card
 			int u=0;
 			while(u+1<handCapacity){
+				gameValue = HandOfCards.ONE_PAIR_DEFAULT;
 				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. These statements weight the cards from the pair being the heaviest weighted to the lowest card outside the hand to enable hands with a common pair to be separated.
 					if(u+1==1){
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
 					}
 					else if(u+1==2){
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
 					}
 					else if(u+1==3){
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[4].getGameValue());
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[4].getGameValue());
 					}
 					else
-						gameValue = (int) (HandOfCards.ONE_PAIR_DEFAULT+pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[2].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[2].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
 				}
 				u++;
 			}
@@ -386,33 +387,42 @@ public class HandOfCards {
 			*/
 		int counter = 0;
 		boolean achieved = false;
+		DeckOfCards CardDeck = new DeckOfCards();
+		HandOfCards CardHand = new HandOfCards(CardDeck);
+		HandOfCards CardHand1 = new HandOfCards(CardDeck);
 		while(!achieved){
 			counter++;
-		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
-		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isFlush()){
+		CardHand = new HandOfCards(CardDeck);		
+		if(CardHand.isFullHouse()){
 			System.out.println(CardHand.handString());
-			System.out.println("Game value:"+(CardHand.getGameValue()-FLUSH_DEFAULT));
+			System.out.println("Game value:"+(CardHand.getGameValue()-FULL_HOUSE_DEFAULT));
 			achieved=true;
 		}
 		}
-		System.out.println("Flush! "+counter);
-		
+
 		counter = 0;
 		achieved = false;
 		while(!achieved){
 			counter++;
-		DeckOfCards CardDeck = new DeckOfCards();
 		CardDeck.shuffle();
-		HandOfCards CardHand = new HandOfCards(CardDeck);
-		if(CardHand.isFlush()){
-			System.out.println(CardHand.handString());
-			System.out.println("Game value:"+(CardHand.getGameValue()-FLUSH_DEFAULT));
+		CardHand1 = new HandOfCards(CardDeck);
+
+		if(CardHand1.isFullHouse()){
+			System.out.println(CardHand1.handString());
+			System.out.println("Game value:"+(CardHand1.getGameValue()-FULL_HOUSE_DEFAULT));
 			achieved=true;
 		}
 		}
-		
-		System.out.println("Flush! "+counter);
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
 	}
 }
