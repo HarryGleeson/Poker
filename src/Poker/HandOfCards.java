@@ -317,8 +317,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isStraightFlush()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -328,13 +327,11 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand1 = new HandOfCards(CardDeck);
 			if(CardHand1.isStraightFlush()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -351,8 +348,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isFourOfAKind()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -362,13 +358,11 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand1 = new HandOfCards(CardDeck);
 			if(CardHand1.isFourOfAKind()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -385,8 +379,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isFullHouse()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -396,13 +389,11 @@ public class HandOfCards {
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isFullHouse()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -419,8 +410,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isStraight()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -430,13 +420,11 @@ public class HandOfCards {
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isStraight()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -453,8 +441,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isThreeOfAKind()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -464,13 +451,11 @@ public class HandOfCards {
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isThreeOfAKind()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -487,8 +472,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isTwoPair()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -497,13 +481,11 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand1 = new HandOfCards(CardDeck);
 			if(CardHand1.isTwoPair()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -520,8 +502,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isOnePair()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -531,13 +512,11 @@ public class HandOfCards {
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isOnePair()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
@@ -554,8 +533,7 @@ public class HandOfCards {
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isHighHand()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 				achieved=true;
 			}
 		}
@@ -565,13 +543,11 @@ public class HandOfCards {
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isHighHand()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
 				achieved=true;
 			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
 			System.out.println("Hand 1 wins!");
 		}
 		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
