@@ -275,8 +275,8 @@ public class HandOfCards {
 		else if(isOnePair()){//Formula = HandOfCards.ONE_PAIR_DEFAULT + (game value of pair * 3)^4 + (game value highest non pair card)^3 + (game value of second lowest non pair card)^2 + game value of lowest non pair card
 			int u=0;
 			while(u+1<handCapacity){
-				gameValue = HandOfCards.ONE_PAIR_DEFAULT;
 				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. These statements weight the cards from the pair being the heaviest weighted to the lowest card outside the hand to enable hands with a common pair to be separated.
+					gameValue = HandOfCards.ONE_PAIR_DEFAULT;
 					if(u+1==1){
 						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
 					}
@@ -305,48 +305,14 @@ public class HandOfCards {
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-	
+	//BELOW GENERATES 2 OF THE SAME CATEGORY OF HAND FOR ALL POSSIBLE CATEGORISATIONS OF HANDS AND COMPARES THEM TO TEST THE getGameValue method. Royal flush does not need to be tested as if there are 2 royal flushes the pot will be split automatically.
 		boolean achieved = false;
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
-		
-		//TESTS 2 ROYAL FLUSHES AGAINST EACH OTHER, SHOULD ALWAYS BE A SPLIT POT:
-		System.out.println("Testing Royal Flush:");
-		while(!achieved){
-			CardDeck.shuffle();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isRoyalFlush()){
-				System.out.println(CardHand.handString());
-				System.out.println("Game value:"+(CardHand.getGameValue()));
-				achieved=true;
-			}
-		}
 
-		achieved = false;
-		while(!achieved){
-			CardDeck.shuffle();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isRoyalFlush()){
-				System.out.println(CardHand1.handString());
-				System.out.println("Game value:"+(CardHand1.getGameValue()));
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
-		System.out.println("\nTesting Straight Flush:");
+		System.out.println("Testing Straight Flush:");
 		while(!achieved){
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
@@ -380,7 +346,7 @@ public class HandOfCards {
 		achieved = false;
 			
 		//TESTS 2 FOUR OF A KINDS AGAINST EACH OTHER:
-		System.out.println("\nTesting Royal Flush:");
+		System.out.println("\nTesting Four Of A Kind:");
 		while(!achieved){
 			CardDeck.shuffle();
 			CardHand = new HandOfCards(CardDeck);		
