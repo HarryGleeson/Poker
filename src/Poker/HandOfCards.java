@@ -305,114 +305,304 @@ public class HandOfCards {
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-	/*	DeckOfCards CardDeck = new DeckOfCards();
-		CardDeck.shuffle();
-		HandOfCards CardHand = new HandOfCards(CardDeck);
-		System.out.println(CardHand.handString());
-		boolean rf = CardHand.isRoyalFlush();
-		boolean sf = CardHand.isStraightFlush();
-		boolean fk = CardHand.isFourOfAKind();
-		boolean fh = CardHand.isFullHouse();
-		boolean fl = CardHand.isFlush();
-		boolean st = CardHand.isStraight();
-		boolean tk = CardHand.isThreeOfAKind();
-		boolean tp = CardHand.isTwoPair();
-		boolean op = CardHand.isOnePair();
-		boolean hh = CardHand.isHighHand();
-		if (rf)
-			System.out.println("Royal Flush");
-		if (sf)
-			System.out.println("Straight Flush");
-		if (fk)
-			System.out.println("Four Of A Kind");
-		if (fh)
-			System.out.println("Full House");
-		if (fl)
-			System.out.println("Flush");
-		if (st)
-			System.out.println("Straight");
-		if (tk)
-			System.out.println("Three Of A Kind");
-		if (tp)
-			System.out.println("Two Pair");
-		if (op)
-			System.out.println("One Pair");
-		if (hh)
-			System.out.println("High Hand");
-		System.out.println("Game Value: "+CardHand.getGameValue()+"\n");
-		
-		HandOfCards CardHand1 = new HandOfCards(CardDeck);
-		System.out.println(CardHand1.handString());
-		boolean rf1 = CardHand1.isRoyalFlush();
-		boolean sf1 = CardHand1.isStraightFlush();
-		boolean fk1 = CardHand1.isFourOfAKind();
-		boolean fh1 = CardHand1.isFullHouse();
-		boolean fl1 = CardHand1.isFlush();
-		boolean st1 = CardHand1.isStraight();
-		boolean tk1 = CardHand1.isThreeOfAKind();
-		boolean tp1 = CardHand1.isTwoPair();
-		boolean op1 = CardHand1.isOnePair();
-		boolean hh1 = CardHand1.isHighHand();
-		if (rf1)
-			System.out.println("Royal Flush");
-		if (sf1)
-			System.out.println("Straight Flush");
-		if (fk1)
-			System.out.println("Four Of A Kind");
-		if (fh1)
-			System.out.println("Full House");
-		if (fl1)
-			System.out.println("Flush");
-		if (st1)
-			System.out.println("Straight");
-		if (tk1)
-			System.out.println("Three Of A Kind");
-		if (tp1)
-			System.out.println("Two Pair");
-		if (op1)
-			System.out.println("One Pair");
-		if (hh1)
-			System.out.println("High Hand");
-			
-			
-		System.out.println("Game Value: "+CardHand1.getGameValue());
-		if (CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("CardHand wins");
-		}
-		else if (CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("CardHand1 wins");
-		}
-		else
-			System.out.println("Split pot. Game Values: "+CardHand.getGameValue());
-			*/
-		int counter = 0;
+	
 		boolean achieved = false;
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
+		
+		//TESTS 2 ROYAL FLUSHES AGAINST EACH OTHER, SHOULD ALWAYS BE A SPLIT POT:
+		System.out.println("Testing Royal Flush:");
 		while(!achieved){
-			counter++;
-		CardDeck.shuffle();
-		CardHand = new HandOfCards(CardDeck);		
-		if(CardHand.isFullHouse()){
-			System.out.println(CardHand.handString());
-			System.out.println("Game value:"+(CardHand.getGameValue()-FULL_HOUSE_DEFAULT));
-			achieved=true;
-		}
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isRoyalFlush()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
 		}
 
-		counter = 0;
 		achieved = false;
 		while(!achieved){
-			counter++;
-		CardDeck.shuffle();
-		CardHand1 = new HandOfCards(CardDeck);
-
-		if(CardHand1.isFullHouse()){
-			System.out.println(CardHand1.handString());
-			System.out.println("Game value:"+(CardHand1.getGameValue()-FULL_HOUSE_DEFAULT));
-			achieved=true;
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+			if(CardHand1.isRoyalFlush()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
 		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		
+		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
+		System.out.println("\nTesting Straight Flush:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isStraightFlush()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+			if(CardHand1.isStraightFlush()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}	
+		achieved = false;
+			
+		//TESTS 2 FOUR OF A KINDS AGAINST EACH OTHER:
+		System.out.println("\nTesting Royal Flush:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isFourOfAKind()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+			if(CardHand1.isFourOfAKind()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		
+		//TESTS 2 FULL HOUSES AGAINST EACH OTHER:
+		System.out.println("\nTesting Full House:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isFullHouse()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+
+			if(CardHand1.isFullHouse()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved=false;
+		
+		//TESTS 2 STRAIGHTS AGAINST EACH OTHER:
+		System.out.println("\nTesting Straight:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isStraight()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+
+			if(CardHand1.isStraight()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		
+		//TESTS 2 THREE OF A KINDS AGAINST EACH OTHER:
+		System.out.println("\nTesting Three Of A Kind:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isThreeOfAKind()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+
+			if(CardHand1.isThreeOfAKind()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		
+		//TESTS 2 TWO PAIRS AGAINST EACH OTHER:
+		System.out.println("\nTesting Two Pair:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isTwoPair()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+			if(CardHand1.isTwoPair()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		
+		//TESTS 2 ONE PAIRS AGAINST EACH OTHER:
+		System.out.println("\nTesting One Pair:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isOnePair()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+
+			if(CardHand1.isOnePair()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		
+		//TESTS 2 HIGH HANDS AGAINST EACH OTHER:
+		System.out.println("\nTesting High Hand:");
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isHighHand()){
+				System.out.println(CardHand.handString());
+				System.out.println("Game value:"+(CardHand.getGameValue()));
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.shuffle();
+			CardHand1 = new HandOfCards(CardDeck);
+
+			if(CardHand1.isHighHand()){
+				System.out.println(CardHand1.handString());
+				System.out.println("Game value:"+(CardHand1.getGameValue()));
+				achieved=true;
+			}
 		}
 		if(CardHand.getGameValue()>CardHand1.getGameValue()){
 			System.out.println(CardHand.getGameValue()+" "+CardHand1.getGameValue());
