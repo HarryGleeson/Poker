@@ -310,7 +310,10 @@ public class HandOfCards {
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
-
+		int[] comparisonArray = new int[10];
+		int i=1, j=0;
+		comparisonArray[0] = ROYAL_FLUSH_DEFAULT;//As royal flush does not need to be tested, the first value in the comparison array is set to its default value.
+		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 		System.out.println("Testing Straight Flush:");
 		while(!achieved){
@@ -341,7 +344,9 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}	
 		achieved = false;
-			
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
+		
 		//TESTS 2 FOUR OF A KINDS AGAINST EACH OTHER:
 		System.out.println("\nTesting Four Of A Kind:");
 		while(!achieved){
@@ -372,6 +377,8 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		achieved = false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
 		
 		//TESTS 2 FULL HOUSES AGAINST EACH OTHER:
 		System.out.println("\nTesting Full House:");
@@ -403,6 +410,8 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		achieved=false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
 		
 		//TESTS 2 STRAIGHTS AGAINST EACH OTHER:
 		System.out.println("\nTesting Straight:");
@@ -434,6 +443,8 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		achieved = false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
 		
 		//TESTS 2 THREE OF A KINDS AGAINST EACH OTHER:
 		System.out.println("\nTesting Three Of A Kind:");
@@ -465,6 +476,8 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		achieved = false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
 		
 		//TESTS 2 TWO PAIRS AGAINST EACH OTHER:
 		System.out.println("\nTesting Two Pair:");
@@ -495,6 +508,8 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		achieved = false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
 		
 		//TESTS 2 ONE PAIRS AGAINST EACH OTHER:
 		System.out.println("\nTesting One Pair:");
@@ -526,6 +541,8 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		achieved = false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
 		
 		//TESTS 2 HIGH HANDS AGAINST EACH OTHER:
 		System.out.println("\nTesting High Hand:");
@@ -556,5 +573,18 @@ public class HandOfCards {
 		else{
 			System.out.println("Split Pot");
 		}
+		comparisonArray[i] = CardHand.getGameValue();
+		
+		System.out.println("\nRoyal Flush > Straight Flush > Four of a Kind > Full House > Flush > Straight > Three of a Kind > Two Pair > One Pair > High Hand?");
+		while(j<i){//TESTS NO HAND OF LOWER VALUE RETURNS A HIGHER getGameValue VALUE THAN A HAND OF HIGHER VALUE
+			if(comparisonArray[j]>comparisonArray[j+1]){
+				System.out.println(comparisonArray[j]);
+				j++;				
+			}
+			else
+				System.out.println("False. Game value order not in keeping with quality of hands.");
+		}
+		System.out.println("True");
+		
 	}
 }
