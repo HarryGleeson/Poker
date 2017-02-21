@@ -259,11 +259,11 @@ public class HandOfCards {
 			gameValue = (int) (HandOfCards.STRAIGHT_DEFAULT+hand[SECOND_CARD_INDEX].getGameValue());//The highest card in the straight wins in the case of 2 straights. I have used the second highest card in the hand to separate 2 straights instead of the first card as in the case of A,2,3,4,5, the result would be incorrect. So the game value of the second card in the hand is added on, if 2 hands have the same second card in a straight, the pot is split
 		}
 		else if(isThreeOfAKind()){//Formula = HandOfCards.THREE_OF_A_KIND_DEFAULT + (game value of three of a kind)^3 + (game value of of higher non-three of a kind card)^2 + game value of lower non-three of a kind card
-			gameValue = (int) (HandOfCards.THREE_OF_A_KIND_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3));//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
-			if(hand[THIRD_CARD_INDEX].getGameValue()!=hand[FOURTH_CARD_INDEX].getGameValue()){//Means that the non-three of a kind cards are in hand[3] and hand[4]
+			gameValue = (int) (HandOfCards.THREE_OF_A_KIND_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3));//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added. If two hands have the same three of a kind, the highest card not part of the three wins, if these are the same the higher of the other card not part of the three wins. If this is also the same, the pot is split.
+			if(hand[THIRD_CARD_INDEX].getGameValue()!=hand[FOURTH_CARD_INDEX].getGameValue()){//Means that the non-three of a kind cards are in hand[FOURTH_CARD_INDEX] and hand[FIFTH_CARD_INDEX]
 				gameValue+=pow(hand[FOURTH_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue();
 			}
-			else if(hand[SECOND_CARD_INDEX].getGameValue()!=hand[THIRD_CARD_INDEX].getGameValue()){//Means that the non-three of a kind cards are in hand[0] and hand[1]
+			else if(hand[SECOND_CARD_INDEX].getGameValue()!=hand[THIRD_CARD_INDEX].getGameValue()){//Means that the non-three of a kind cards are in hand[FIRST_CARD_INDEX] and hand[SECOND_CARD_INDEX]
 				gameValue+=pow(hand[FIRST_CARD_INDEX].getGameValue(), 2)+hand[SECOND_CARD_INDEX].getGameValue();
 			}
 			else//Otherwise the non three of a kind cards are in hand[FIRST_CARD_INDEX] and hand[FIFTS_CARD_INDEX]
@@ -592,6 +592,5 @@ public class HandOfCards {
 				System.out.println("False. Game value order not in keeping with quality of hands.");
 		}
 		System.out.println("True");
-		
 	}
 }
