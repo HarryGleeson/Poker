@@ -9,6 +9,8 @@ public class HandOfCards {
 	private int[] wrappedStraightGameValue = new int[]{14, 5, 4, 3, 2}; //To allow for comparison of special straight case A,2,3,4,5
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
+	
+	//Constants for defaults used in getGameValue() method
 	static final int HIGH_HAND_DEFAULT = 0;
 	static final int ONE_PAIR_DEFAULT = 10000000;
 	static final int TWO_PAIR_DEFAULT = 20000000;
@@ -19,6 +21,13 @@ public class HandOfCards {
 	static final int FOUR_OF_A_KIND_DEFAULT = 70000000;
 	static final int STRAIGHT_FLUSH_DEFAULT = 80000000;
 	static final int ROYAL_FLUSH_DEFAULT = 90000000;
+	
+	//Constants used for array indexes
+	static final int FIRST_CARD_INDEX = 0;
+	static final int SECOND_CARD_INDEX = 0;
+	static final int THIRD_CARD_INDEX = 0;
+	static final int FOURTH_CARD_INDEX = 0;
+	static final int FIFTH_CARD_INDEX = 0;
 	
 	
 	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them 
@@ -216,60 +225,60 @@ public class HandOfCards {
 		return true;
 	}
 	
-	public int getGameValue(){
+	public int getGameValue(){ //This method returns an integer value depending on the quality of the hand.
 		int gameValue=0;
-		if(isRoyalFlush()){
-			gameValue = HandOfCards.ROYAL_FLUSH_DEFAULT;
+		if(isRoyalFlush()){//Formula = HandOfCards.ROYAL_FLUSH_DEFAULT 
+			gameValue = HandOfCards.ROYAL_FLUSH_DEFAULT;//If 2 players have a royal flush, they cannot be separated and the pot is split. 
 		}
-		else if(isStraightFlush()){//Formula =  HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[1].getGameValue
-			gameValue = HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[1].getGameValue();//Adds second card game value because of the case with A,2,3,4,5 if first card compared would give misleading result
+		else if(isStraightFlush()){//Formula =  HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[SECOND_CARD_INDEX].getGameValue
+			gameValue = HandOfCards.STRAIGHT_FLUSH_DEFAULT+hand[SECOND_CARD_INDEX].getGameValue();//If 2 players have straight flushes, the winner is decided by the straight with the highest high card. Adds second card game value because of the case with A,2,3,4,5 if first card compared would give misleading result. If 2 hands have the same second card in a straight flush, the pot is split.
 		}
-		else if(isFourOfAKind()){//If 2 hands have 4 of a kind, they are separated by the non four of a kind card in the hand. Formula = HandOfCards.FOUR_OF_A_KIND_DEFAULT+(game value of four of a kind)^3+(game value of non four of a kind card)
-			if(hand[2].getGameValue()==hand[0].getGameValue()){//This checks the location of the non four of a kind card, if this is true, the non matching card is the last card in the hand so the game value of it is added to the game value to separate in case 2 hands have the same 4 of a kind
-				gameValue = (int) (HandOfCards.FOUR_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3)+hand[4].getGameValue());//The second card in the hand is guaranteed to be part of the four of a kind so its value can separate 2 fourOfAKind hands, then the value of the other card is added on to determine a winner in the case of 2 identical 4 of a kinds
+		else if(isFourOfAKind()){//Formula = HandOfCards.FOUR_OF_A_KIND_DEFAULT+(game value of four of a kind)^3+(game value of non four of a kind card). If 2 hands have 4 of a kind, the winner is the hand with the higher 4 of a kind. If two hands have the same four of a kind, they are separated by the non four of a kind card in the hand. If they have the same four of a kind and the same other card, the pot is split.
+			if(hand[THIRD_CARD_INDEX].getGameValue()==hand[FIRST_CARD_INDEX].getGameValue()){//This checks the location of the non four of a kind card, if this is true, the non matching card is the last card in the hand so the game value of it is added to the game value to separate in case 2 hands have the same 4 of a kind
+				gameValue = (int) (HandOfCards.FOUR_OF_A_KIND_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3)+hand[FIFTH_CARD_INDEX].getGameValue());//The second card in the hand is guaranteed to be part of the four of a kind so its value can separate 2 fourOfAKind hands, then the value of the other card is added on to determine a winner in the case of 2 identical 4 of a kinds
 			}
 			else//In this case, the non four of a kind card is the first card in the hand and its game value is added to the four of a kind's value cubed
-				gameValue = (int) (HandOfCards.FOUR_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3)+hand[0].getGameValue());
+				gameValue = (int) (HandOfCards.FOUR_OF_A_KIND_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3)+hand[FIRST_CARD_INDEX].getGameValue());
 		}
 		else if(isFullHouse()){//To separate 2 full houses, the full house with the higher three of a kind wins. The third card in the hand, hand[2] is guaranteed to be in the 3 of a kind. Formula = HandOfCards.FULL_HOUSE_DEFAULT+ (face value of three of a kind)^4+(face value of pair)
-			if(hand[2].getGameValue()==hand[1].getGameValue()){//This checks the location of the pair, if this is true, the pair is the last 2 cards in the hand so the game value of them is added to the game value to separate in case 2 hands have the same 3 of a kind in their full houses
-				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[2].getGameValue(), 4)+hand[3].getGameValue());
+			if(hand[THIRD_CARD_INDEX].getGameValue()==hand[SECOND_CARD_INDEX].getGameValue()){//This checks the location of the pair, if this is true, the pair is the last 2 cards in the hand so the game value of them is added to the game value to separate in case 2 hands have the same 3 of a kind in their full houses
+				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 4)+hand[FOURTH_CARD_INDEX].getGameValue());
 			}
 			else
-				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[2].getGameValue(), 4)+hand[1].getGameValue());
+				gameValue = (int) (HandOfCards.FULL_HOUSE_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 4)+hand[SECOND_CARD_INDEX].getGameValue());
 		}
 		else if(isFlush()){//To separate 2 flushes look at highest card in both flushes. If both have same high card, move to next highest. Formula = HandOfCards.FLUSH_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
-			int j=5;
+			int j=handCapacity;
 			gameValue = HandOfCards.FLUSH_DEFAULT;
 			for(int i=0; i<handCapacity; i++){
 				gameValue += (int) pow(hand[i].getGameValue(), j);
 				j--;
 			}
 		}
-		else if(isStraight()){//Formula = HandOfCards.STRAIGHT_DEFAULT+hand[1].getGameValue
-			gameValue = (int) (HandOfCards.STRAIGHT_DEFAULT+hand[1].getGameValue());//The highest card in the straight wins in the case of 2 straights. I have used the second highest card in the hand to separate 2 straights instead of the first card as in the case of A,2,3,4,5, the result would be incorrect. So the game value of the second card in the hand is added on, if 2 hands have the same second card in a straight, the pot is split
+		else if(isStraight()){//Formula = HandOfCards.STRAIGHT_DEFAULT+hand[SECOND_CARD_INDEX].getGameValue
+			gameValue = (int) (HandOfCards.STRAIGHT_DEFAULT+hand[SECOND_CARD_INDEX].getGameValue());//The highest card in the straight wins in the case of 2 straights. I have used the second highest card in the hand to separate 2 straights instead of the first card as in the case of A,2,3,4,5, the result would be incorrect. So the game value of the second card in the hand is added on, if 2 hands have the same second card in a straight, the pot is split
 		}
 		else if(isThreeOfAKind()){//Formula = HandOfCards.THREE_OF_A_KIND_DEFAULT + (game value of three of a kind)^3 + (game value of of higher non-three of a kind card)^2 + game value of lower non-three of a kind card
-			gameValue = (int) (HandOfCards.THREE_OF_A_KIND_DEFAULT+pow(hand[2].getGameValue(), 3));//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
-			if(hand[2].getGameValue()!=hand[3].getGameValue()){//Means that the non-three of a kind cards are in hand[3] and hand[4]
-				gameValue+=pow(hand[3].getGameValue(), 2)+hand[4].getGameValue();
+			gameValue = (int) (HandOfCards.THREE_OF_A_KIND_DEFAULT+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3));//To separate three of a kind, the hand with the higher three wins. The third card in the hand is guaranteed to be part of the three of a kind so its value is added.
+			if(hand[THIRD_CARD_INDEX].getGameValue()!=hand[FOURTH_CARD_INDEX].getGameValue()){//Means that the non-three of a kind cards are in hand[3] and hand[4]
+				gameValue+=pow(hand[FOURTH_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue();
 			}
-			else if(hand[1].getGameValue()!=hand[2].getGameValue()){//Means that the non-three of a kind cards are in hand[0] and hand[1]
-				gameValue+=pow(hand[0].getGameValue(), 2)+hand[1].getGameValue();
+			else if(hand[SECOND_CARD_INDEX].getGameValue()!=hand[THIRD_CARD_INDEX].getGameValue()){//Means that the non-three of a kind cards are in hand[0] and hand[1]
+				gameValue+=pow(hand[FIRST_CARD_INDEX].getGameValue(), 2)+hand[SECOND_CARD_INDEX].getGameValue();
 			}
-			else//Otherwise the non three of a kind cards are in hand[0] and hand[4]
-				gameValue+=pow(hand[0].getGameValue(), 2)+hand[4].getGameValue();
+			else//Otherwise the non three of a kind cards are in hand[FIRST_CARD_INDEX] and hand[FIFTS_CARD_INDEX]
+				gameValue+=pow(hand[FIRST_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue();
 		}
 		else if(isTwoPair()){//Formula = HandOfCards.TWO_PAIR_DEFAULT + (higher pair game value)^3 + (lower pair game value)^2 + non-pair card game value
-			gameValue = (int) (HandOfCards.TWO_PAIR_DEFAULT+pow(hand[1].getGameValue(),3)+pow(hand[3].getGameValue(),2));//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added, and the fourth card in the hand is guaranteed to be part of the lower of the 2 pairs. Then if the 2 sets of 2 pairs are the same, the outlier card's value is added. The face value of the highest pair is weighted highest, followed by the lower pair then the outlier
-			if(hand[0].getGameValue()!=hand[1].getGameValue()){//Means non pair card is hand[0]
-				gameValue+=hand[0].getGameValue();
+			gameValue = (int) (HandOfCards.TWO_PAIR_DEFAULT+pow(hand[SECOND_CARD_INDEX].getGameValue(),3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(),2));//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added, and the fourth card in the hand is guaranteed to be part of the lower of the 2 pairs. Then if the 2 sets of 2 pairs are the same, the outlier card's value is added. The face value of the highest pair is weighted highest, followed by the lower pair then the outlier
+			if(hand[FIRST_CARD_INDEX].getGameValue()!=hand[SECOND_CARD_INDEX].getGameValue()){//Means non pair card is hand[FIRST_CARD_INDEX]
+				gameValue+=hand[FIRST_CARD_INDEX].getGameValue();
 			}
-			else if(hand[1].getGameValue()!=hand[2].getGameValue()&&hand[2].getGameValue()!=hand[3].getGameValue()){//Means non pair card is hand[2]
-				gameValue+=hand[2].getGameValue();
+			else if(hand[SECOND_CARD_INDEX].getGameValue()!=hand[THIRD_CARD_INDEX].getGameValue()&&hand[THIRD_CARD_INDEX].getGameValue()!=hand[FOURTH_CARD_INDEX].getGameValue()){//Means non pair card is hand[THIRD_CARD_INDEX]
+				gameValue+=hand[THIRD_CARD_INDEX].getGameValue();
 			}
-			else//Otherwise the non pair card is hand[4]
-				gameValue+=hand[4].getGameValue();
+			else//Otherwise the non pair card is hand[FIFTH_CARD_INDEX]
+				gameValue+=hand[FIFTH_CARD_INDEX].getGameValue();
 
 		}
 		else if(isOnePair()){//Formula = HandOfCards.ONE_PAIR_DEFAULT + (game value of pair * 3)^4 + (game value highest non pair card)^3 + (game value of second lowest non pair card)^2 + game value of lowest non pair card
@@ -278,22 +287,22 @@ public class HandOfCards {
 				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. These statements weight the cards from the pair being the heaviest weighted to the lowest card outside the hand to enable hands with a common pair to be separated.
 					gameValue = HandOfCards.ONE_PAIR_DEFAULT;
 					if(u+1==1){
-						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[2].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue());
 					}
 					else if(u+1==2){
-						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[3].getGameValue(), 2)+hand[4].getGameValue());
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[FIRST_CARD_INDEX].getGameValue(), 3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue());
 					}
 					else if(u+1==3){
-						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[4].getGameValue());
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[FIRST_CARD_INDEX].getGameValue(), 3)+pow(hand[SECOND_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue());
 					}
 					else
-						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[0].getGameValue(), 3)+pow(hand[1].getGameValue(), 2)+hand[2].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
+						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[FIRST_CARD_INDEX].getGameValue(), 3)+pow(hand[SECOND_CARD_INDEX].getGameValue(), 2)+hand[THIRD_CARD_INDEX].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
 				}
 				u++;
 			}
 		}
 		else if(isHighHand()){//In the case two hands have the same high hands, the rest of the hand is gone through to separate them. This weights the hand appropriately from highest card to lowest in order to separate two high hands. Formula = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
-			int j=5;
+			int j=handCapacity;
 			gameValue = HandOfCards.HIGH_HAND_DEFAULT;
 			for(int i=0; i<handCapacity; i++){
 				gameValue += (int) pow(hand[i].getGameValue(), j);
@@ -317,7 +326,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 		System.out.println("Testing Straight Flush:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isStraightFlush()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -327,7 +336,7 @@ public class HandOfCards {
 
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 			if(CardHand1.isStraightFlush()){
 				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
@@ -350,7 +359,7 @@ public class HandOfCards {
 		//TESTS 2 FOUR OF A KINDS AGAINST EACH OTHER:
 		System.out.println("\nTesting Four Of A Kind:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isFourOfAKind()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -360,7 +369,7 @@ public class HandOfCards {
 
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 			if(CardHand1.isFourOfAKind()){
 				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
@@ -383,7 +392,7 @@ public class HandOfCards {
 		//TESTS 2 FULL HOUSES AGAINST EACH OTHER:
 		System.out.println("\nTesting Full House:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isFullHouse()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -392,7 +401,7 @@ public class HandOfCards {
 		}
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isFullHouse()){
@@ -416,7 +425,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHTS AGAINST EACH OTHER:
 		System.out.println("\nTesting Straight:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isStraight()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -425,7 +434,7 @@ public class HandOfCards {
 		}
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isStraight()){
@@ -449,7 +458,7 @@ public class HandOfCards {
 		//TESTS 2 THREE OF A KINDS AGAINST EACH OTHER:
 		System.out.println("\nTesting Three Of A Kind:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isThreeOfAKind()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -458,7 +467,7 @@ public class HandOfCards {
 		}
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isThreeOfAKind()){
@@ -482,7 +491,7 @@ public class HandOfCards {
 		//TESTS 2 TWO PAIRS AGAINST EACH OTHER:
 		System.out.println("\nTesting Two Pair:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isTwoPair()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -491,7 +500,7 @@ public class HandOfCards {
 		}
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 			if(CardHand1.isTwoPair()){
 				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
@@ -514,7 +523,7 @@ public class HandOfCards {
 		//TESTS 2 ONE PAIRS AGAINST EACH OTHER:
 		System.out.println("\nTesting One Pair:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isOnePair()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -523,7 +532,7 @@ public class HandOfCards {
 		}
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isOnePair()){
@@ -547,7 +556,7 @@ public class HandOfCards {
 		//TESTS 2 HIGH HANDS AGAINST EACH OTHER:
 		System.out.println("\nTesting High Hand:");
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
 			if(CardHand.isHighHand()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
@@ -556,7 +565,7 @@ public class HandOfCards {
 		}
 		achieved = false;
 		while(!achieved){
-			CardDeck.shuffle();
+			CardDeck.reset();
 			CardHand1 = new HandOfCards(CardDeck);
 
 			if(CardHand1.isHighHand()){
@@ -574,11 +583,9 @@ public class HandOfCards {
 			System.out.println("Split Pot");
 		}
 		comparisonArray[i] = CardHand.getGameValue();
-		
 		System.out.println("\nRoyal Flush > Straight Flush > Four of a Kind > Full House > Flush > Straight > Three of a Kind > Two Pair > One Pair > High Hand?");
 		while(j<i){//TESTS NO HAND OF LOWER VALUE RETURNS A HIGHER getGameValue VALUE THAN A HAND OF HIGHER VALUE
 			if(comparisonArray[j]>comparisonArray[j+1]){
-				System.out.println(comparisonArray[j]);
 				j++;				
 			}
 			else
