@@ -321,47 +321,15 @@ public class HandOfCards {
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-	//BELOW GENERATES 2 OF THE SAME CATEGORY OF HAND FOR ALL POSSIBLE CATEGORISATIONS OF HANDS AND COMPARES THEM TO TEST THE getGameValue method. 
+	//BELOW GENERATES 2 OF THE SAME CATEGORY OF HAND FOR ALL POSSIBLE CATEGORISATIONS OF HANDS AND COMPARES THEM TO TEST THE getGameValue method, EXCLUDING THE ROYAL FLUSH AS IT TAKES A LONG TIME TO GENERATE AND WILL ALWAYS RESULT IN A DRAW AND A SPLIT POT. 
 		boolean achieved = false;
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
 		int[] comparisonArray = new int[10];
-		int i=0, j=0;
-		System.out.println("For testing, the program will now generate 2 instances of each type of hand and determine a winner between them:");
-		
-		//TESTS 2 Royal FLUSHES AGAINST EACH OTHER:
-				System.out.println("\nTesting Royal Flush: (Usually slow)");
-				while(!achieved){
-					CardDeck.reset();
-					CardHand = new HandOfCards(CardDeck);		
-					if(CardHand.isRoyalFlush()){
-						System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-						achieved=true;
-					}
-				}
-
-				achieved = false;
-				while(!achieved){
-					CardDeck.reset();
-					CardHand1 = new HandOfCards(CardDeck);
-					if(CardHand1.isRoyalFlush()){
-						System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-						achieved=true;
-					}
-				}
-				if(CardHand.getGameValue()>CardHand1.getGameValue()){
-					System.out.println("Hand 1 wins!");
-				}
-				else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-					System.out.println("Hand 2 wins!");
-				}
-				else{
-					System.out.println("Split Pot");
-				}	
-				achieved = false;
-				comparisonArray[i] = CardHand.getGameValue();
-				i++;
+		int i=1, j=0;
+		comparisonArray[0] = ROYAL_FLUSH_DEFAULT; //As royal flush isn't tested, its default value is added to the comparison array
+		System.out.println("For testing, the program will now generate 2 instances of each type of hand, excluding royal flush, and determine a winner between them:");
 		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 		System.out.println("\nTesting Straight Flush:");
