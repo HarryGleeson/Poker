@@ -327,7 +327,7 @@ public class HandOfCards {
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
 		int[] comparisonArray = new int[10];
-		int i=1, j=0;
+		int i=0, j=0;
 		
 		//TESTS 2 Royal FLUSHES AGAINST EACH OTHER:
 				System.out.println("Testing Royal Flush:");
