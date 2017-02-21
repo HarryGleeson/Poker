@@ -51,6 +51,7 @@ public class DeckOfCards {
 	}
 	
 	PlayingCard dealNext(){// Goes through the deck in order and deals the next time in the deck each time it is called
+		synchronized(cards){
 		if(i>51){// Checks that not all of the cards in the deck have been dealt, if they have, return to start of deck
 			i=1;
 		}
@@ -58,6 +59,7 @@ public class DeckOfCards {
 			i++;
 		}
 		return cards[i-1];
+		}
 	}
 	
 	void returnCard(PlayingCard discarded){// Once a card has been dealt, it cannot be dealt again and therefore its value is set to null

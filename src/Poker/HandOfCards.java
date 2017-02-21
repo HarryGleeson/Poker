@@ -321,14 +321,46 @@ public class HandOfCards {
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-	//BELOW GENERATES 2 OF THE SAME CATEGORY OF HAND FOR ALL POSSIBLE CATEGORISATIONS OF HANDS AND COMPARES THEM TO TEST THE getGameValue method. Royal flush does not need to be tested as if there are 2 royal flushes the pot will be split automatically.
+	//BELOW GENERATES 2 OF THE SAME CATEGORY OF HAND FOR ALL POSSIBLE CATEGORISATIONS OF HANDS AND COMPARES THEM TO TEST THE getGameValue method. 
 		boolean achieved = false;
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
 		int[] comparisonArray = new int[10];
 		int i=1, j=0;
-		comparisonArray[0] = ROYAL_FLUSH_DEFAULT;//As royal flush does not need to be tested, the first value in the comparison array is set to its default value.
+		
+		//TESTS 2 Royal FLUSHES AGAINST EACH OTHER:
+				System.out.println("Testing Royal Flush:");
+				while(!achieved){
+					CardDeck.reset();
+					CardHand = new HandOfCards(CardDeck);		
+					if(CardHand.isRoyalFlush()){
+						System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+						achieved=true;
+					}
+				}
+
+				achieved = false;
+				while(!achieved){
+					CardDeck.reset();
+					CardHand1 = new HandOfCards(CardDeck);
+					if(CardHand1.isRoyalFlush()){
+						System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
+						achieved=true;
+					}
+				}
+				if(CardHand.getGameValue()>CardHand1.getGameValue()){
+					System.out.println("Hand 1 wins!");
+				}
+				else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+					System.out.println("Hand 2 wins!");
+				}
+				else{
+					System.out.println("Split Pot");
+				}	
+				achieved = false;
+				comparisonArray[i] = CardHand.getGameValue();
+				i++;
 		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 		System.out.println("Testing Straight Flush:");
