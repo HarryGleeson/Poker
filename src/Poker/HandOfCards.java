@@ -429,6 +429,39 @@ public class HandOfCards {
 		comparisonArray[i] = CardHand.getGameValue();
 		i++;
 		
+		//TESTS 2 FLUSHES AGAINST EACH OTHER:
+		System.out.println("\nTesting Flush:");
+		while(!achieved){
+			CardDeck.reset();
+			CardHand = new HandOfCards(CardDeck);		
+			if(CardHand.isFlush()){
+				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+				achieved=true;
+			}
+		}
+		achieved = false;
+		while(!achieved){
+			CardDeck.reset();
+			CardHand1 = new HandOfCards(CardDeck);
+
+			if(CardHand1.isFlush()){
+				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
+				achieved=true;
+			}
+		}
+		if(CardHand.getGameValue()>CardHand1.getGameValue()){
+			System.out.println("Hand 1 wins!");
+		}
+		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
+			System.out.println("Hand 2 wins!");
+		}
+		else{
+			System.out.println("Split Pot");
+		}
+		achieved = false;
+		comparisonArray[i] = CardHand.getGameValue();
+		i++;
+		
 		//TESTS 2 STRAIGHTS AGAINST EACH OTHER:
 		System.out.println("\nTesting Straight:");
 		while(!achieved){
