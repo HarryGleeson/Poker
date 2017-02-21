@@ -328,9 +328,10 @@ public class HandOfCards {
 		HandOfCards CardHand1 = new HandOfCards(CardDeck);
 		int[] comparisonArray = new int[10];
 		int i=0, j=0;
+		System.out.println("For testing, the program will now generate 2 instances of each type of hand and determine a winner between them:");
 		
 		//TESTS 2 Royal FLUSHES AGAINST EACH OTHER:
-				System.out.println("Testing Royal Flush:");
+				System.out.println("\nTesting Royal Flush: (Usually slow)");
 				while(!achieved){
 					CardDeck.reset();
 					CardHand = new HandOfCards(CardDeck);		
@@ -363,7 +364,7 @@ public class HandOfCards {
 				i++;
 		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
-		System.out.println("Testing Straight Flush:");
+		System.out.println("\nTesting Straight Flush:");
 		while(!achieved){
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
