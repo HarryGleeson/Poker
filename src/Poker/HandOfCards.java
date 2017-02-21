@@ -24,10 +24,10 @@ public class HandOfCards {
 	
 	//Constants used for array indexes
 	static final int FIRST_CARD_INDEX = 0;
-	static final int SECOND_CARD_INDEX = 0;
-	static final int THIRD_CARD_INDEX = 0;
-	static final int FOURTH_CARD_INDEX = 0;
-	static final int FIFTH_CARD_INDEX = 0;
+	static final int SECOND_CARD_INDEX = 1;
+	static final int THIRD_CARD_INDEX = 2;
+	static final int FOURTH_CARD_INDEX = 3;
+	static final int FIFTH_CARD_INDEX = 4;
 	
 	
 	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them 
