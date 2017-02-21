@@ -270,7 +270,7 @@ public class HandOfCards {
 				gameValue+=pow(hand[FIRST_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue();
 		}
 		else if(isTwoPair()){//Formula = HandOfCards.TWO_PAIR_DEFAULT + (higher pair game value)^3 + (lower pair game value)^2 + non-pair card game value
-			gameValue = (int) (HandOfCards.TWO_PAIR_DEFAULT+pow(hand[SECOND_CARD_INDEX].getGameValue(),3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(),2));//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added, and the fourth card in the hand is guaranteed to be part of the lower of the 2 pairs. Then if the 2 sets of 2 pairs are the same, the outlier card's value is added. The face value of the highest pair is weighted highest, followed by the lower pair then the outlier
+			gameValue = (int) (HandOfCards.TWO_PAIR_DEFAULT+pow(hand[SECOND_CARD_INDEX].getGameValue(),3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(),2));//To separate two of a kind, the hand with the higher high pair wins. The second card in the hand is guaranteed to be part of the high pair due to the deck being sorted so its value is added, and the fourth card in the hand is guaranteed to be part of the lower of the 2 pairs. Then if the 2 sets of 2 pairs are the same, the outlier card's value determines the winner. If the pairs and the outlier are the same, the pot is split.
 			if(hand[FIRST_CARD_INDEX].getGameValue()!=hand[SECOND_CARD_INDEX].getGameValue()){//Means non pair card is hand[FIRST_CARD_INDEX]
 				gameValue+=hand[FIRST_CARD_INDEX].getGameValue();
 			}
@@ -284,25 +284,25 @@ public class HandOfCards {
 		else if(isOnePair()){//Formula = HandOfCards.ONE_PAIR_DEFAULT + (game value of pair * 3)^4 + (game value highest non pair card)^3 + (game value of second lowest non pair card)^2 + game value of lowest non pair card
 			int u=0;
 			while(u+1<handCapacity){
-				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. These statements weight the cards from the pair being the heaviest weighted to the lowest card outside the hand to enable hands with a common pair to be separated.
+				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. If these are the same you go to the next highest card outside the pair, if these are the same then the second highest outside the pair then if these are still the same the lowest card outside the pair. If all of these are the same then the pot is split.
 					gameValue = HandOfCards.ONE_PAIR_DEFAULT;
-					if(u+1==1){
+					if(u+1==1){//This means that the pair is hand[FIRST_CARD_INDEX] & hand[SECOND_CARD_INDEX], so the highest to lowest non-pair values are, in descending order, hand[THIRD_CARD_INDEX], hand[FOURTH_CARD_INDEX] and hand[FIFTH_CARD_INDEX]
 						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[THIRD_CARD_INDEX].getGameValue(), 3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue());
 					}
-					else if(u+1==2){
+					else if(u+1==2){//This means that the pair is hand[SECOND_CARD_INDEX] & hand[THIRD_CARD_INDEX], so the highest to lowest non-pair values are, in descending order, hand[FIRST_CARD_INDEX], hand[FOURTH_CARD_INDEX] and hand[FIFTH_CARD_INDEX]
 						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[FIRST_CARD_INDEX].getGameValue(), 3)+pow(hand[FOURTH_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue());
 					}
-					else if(u+1==3){
+					else if(u+1==3){//This means that the pair is hand[THIRD_CARD_INDEX] & hand[FOURTH_CARD_INDEX], so the highest to lowest non-pair values are, in descending order, hand[FIRST_CARD_INDEX], hand[SECOND_CARD_INDEX] and hand[FIFTH_CARD_INDEX]
 						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[FIRST_CARD_INDEX].getGameValue(), 3)+pow(hand[SECOND_CARD_INDEX].getGameValue(), 2)+hand[FIFTH_CARD_INDEX].getGameValue());
 					}
-					else
+					else //This means that the pair is hand[FOURTH_CARD_INDEX] & hand[FIFTH_CARD_INDEX], so the highest to lowest non-pair values are, in descending order, hand[FIRST_CARD_INDEX], hand[SECOND_CARD_INDEX] and hand[THIRD_CARD_INDEX]
 						gameValue += (int) (pow((hand[u].getGameValue()*3), 4)+pow(hand[FIRST_CARD_INDEX].getGameValue(), 3)+pow(hand[SECOND_CARD_INDEX].getGameValue(), 2)+hand[THIRD_CARD_INDEX].getGameValue());//Finds the location of the pair in the hand and adds on the game value, the highest pair separates 2 one pairs.
 				}
 				u++;
 			}
 		}
-		else if(isHighHand()){//In the case two hands have the same high hands, the rest of the hand is gone through to separate them. This weights the hand appropriately from highest card to lowest in order to separate two high hands. Formula = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
-			int j=handCapacity;
+		else if(isHighHand()){//Formula = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
+			int j=handCapacity; //In the case two hands have the same high hands, the higher game value of the next highest card wins, if these are the same the next highest card's game value is compared if all card game values are the same in both hands, the pot is split.
 			gameValue = HandOfCards.HIGH_HAND_DEFAULT;
 			for(int i=0; i<handCapacity; i++){
 				gameValue += (int) pow(hand[i].getGameValue(), j);
