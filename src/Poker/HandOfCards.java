@@ -325,7 +325,56 @@ public class HandOfCards {
 		if(cardPosition<0||cardPosition>=HAND_CAPACITY||isRoyalFlush()){//Tests that the passed card position belongs to a deck
 			return 0;
 		}
-		else
+		else if(isStraightFlush()){
+			return 1;
+		}
+		else if(isFourOfAKind()){//Determines if card not part of four of a kind is below a game value of 5, if so, it should most likely be discarded
+			if(cardPosition==HAND_CAPACITY-1&&hand[cardPosition]!=hand[cardPosition-1]&&hand[cardPosition].getGameValue()<5){ //Tests if the game value of the non four of a kind card is less than 5, if it is, the probability is that it should most likely be discarded
+				return 80;
+			}
+			else if(cardPosition<HAND_CAPACITY-1&&hand[cardPosition]!=hand[cardPosition+1]&&hand[cardPosition].getGameValue()<5){
+				return 80;
+			}
+			else return 2;
+		}
+		else if(isFullHouse()){
+			if((cardPosition>0&&hand[cardPosition-1]==hand[cardPosition+1])||(hand[cardPosition]==hand[cardPosition+2])||(cardPosition==HAND_CAPACITY-1&&hand[cardPosition]==hand[cardPosition-2])){//Means the card at cardPosition is part of the three of a kind and should most likely not be traded
+				return 3;
+			}
+			else{//Otherwise the card is part of the pair in the hand and is still unlikely to be traded, but slightly more likely
+				return 5;
+			}
+		}
+		else if(isFlush()){
+			if(hand[cardPosition].getGameValue()<5){//Checks if there are low cards in the flush with a game value of less than 5, if there are there is a possibility they could be traded in for cards of a higher face value
+				return 7;
+			}
+			else
+				return 4;
+		}
+		else if(isStraight()){
+			if(hand[cardPosition].getGameValue()<5){//Checks if there are low cards in the straight with a game value of less than 5, if there are there is a possibility they could be traded in for cards of a higher face value
+				return 9;
+			}
+			else
+				return 5;
+		}
+		else if(isThreeOfAKind()){
+			if((cardPosition>0&&hand[cardPosition-1]==hand[cardPosition+1])||(hand[cardPosition]==hand[cardPosition+2])||(cardPosition==HAND_CAPACITY-1&&hand[cardPosition]==hand[cardPosition-2])){//Means the card at cardPosition is part of the three of a kind and should most likely not be traded
+				return 6;
+			}
+			else if (hand[cardPosition].getGameValue()<5){ //If one of the non three of a kind cards has game value less than 5 should most likely be traded
+				return 90;
+			}
+			else if(hand[cardPosition].getGameValue()>9){
+				return 60;
+			}
+			else
+				return 75;
+		}
+		else if(isTwoPair()){
+			
+		}
 			return 1;
 	}
 	
