@@ -3,13 +3,14 @@ package Poker;
 
 import static java.lang.Math.pow;
 public class HandOfCards {
-	private int handCapacity = 5;
-	private PlayingCard[] hand = new PlayingCard[handCapacity];
+	private PlayingCard[] hand = new PlayingCard[HAND_CAPACITY];
 	private int[] royalFlushGameValue = new int[]{14, 13, 12, 11, 10}; //To allow to see if game values correspond to that of a royal flush
 	private int[] wrappedStraightGameValue = new int[]{14, 5, 4, 3, 2}; //To allow for comparison of special straight case A,2,3,4,5
 	private DeckOfCards deck = new DeckOfCards();
 	private PlayingCard temp;
 	
+	
+	static final int HAND_CAPACITY = 5;
 	//Constants for defaults used in getGameValue() method
 	static final int HIGH_HAND_DEFAULT = 0;
 	static final int ONE_PAIR_DEFAULT = 10000000;
@@ -32,7 +33,7 @@ public class HandOfCards {
 	
 	public HandOfCards(DeckOfCards deck){ //Deals the hand of cards and sorts them 
 		this.deck = deck;
-		for(int i=0; i<handCapacity; i++){
+		for(int i=0; i<HAND_CAPACITY; i++){
 			hand[i] =deck.dealNext();
 		}
 		sort();
@@ -44,7 +45,7 @@ public class HandOfCards {
 	
 	public String handString(){ //Returns the toString representations of the cards in the hand
 		String handString="";
-		for(int i=0; i<handCapacity; i++){
+		for(int i=0; i<HAND_CAPACITY; i++){
 			handString+=hand[i].toString()+" ,";
 		}
 		return handString;
@@ -52,7 +53,7 @@ public class HandOfCards {
 	
 	private boolean sameSuit(){ //Tests if all of the cards in the hand are of the same set, made its own method to remove duplicate code in isRoyalFlush(), isStraightFlush() and isStraight()
 		int i=0;
-		while (i < handCapacity-1){ 
+		while (i < HAND_CAPACITY-1){ 
 			if (hand[i].getSuit() == hand[i+1].getSuit()){
 				i++;
 			}
@@ -64,7 +65,7 @@ public class HandOfCards {
 	
 	private boolean isSequential(){  //Determines if hands in card are sequence of 5 consecutive game values, made its own method to remove duplicate code in isStraightFlush() and isStraight()
 		int i=0, j=1, n=0;
-		while(j<handCapacity&&i<handCapacity){
+		while(j<HAND_CAPACITY&&i<HAND_CAPACITY){
 			if (hand[n].getGameValue()-j == hand[j].getGameValue()){ //Checks if cards in hand are consecutive in their game values
 				j++;
 			}
@@ -78,8 +79,8 @@ public class HandOfCards {
 	}
 	
 	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value. 
-		for (int i = 0; i < handCapacity-1; i++){
-			for(int j=1;  j < handCapacity-i;  j++ ){
+		for (int i = 0; i < HAND_CAPACITY-1; i++){
+			for(int j=1;  j < HAND_CAPACITY-i;  j++ ){
                 if ( hand[j-1].getGameValue() < hand[j].getGameValue()){
                         temp = hand[j-1];               
                         hand[j-1] = hand[j];
@@ -98,7 +99,7 @@ public class HandOfCards {
 		}
 		else{
 			int i=0;
-			while (i < handCapacity){ //If all cards are of the same suit, the game values of each card is compared to the array containing the game values of a royal flush 
+			while (i < HAND_CAPACITY){ //If all cards are of the same suit, the game values of each card is compared to the array containing the game values of a royal flush 
 				if (hand[i].getGameValue() == royalFlushGameValue[i]){
 					i++;
 				}
@@ -124,7 +125,7 @@ public class HandOfCards {
 		}
 		else{
 			int u=0;
-			while(u+3<handCapacity){
+			while(u+3<HAND_CAPACITY){
 				if(hand[u].getFaceValue() == hand[u+3].getFaceValue()){ //Compares card's face value to face value of card 3 indexes away from it in the hand 
 					return true;
 				}
@@ -140,7 +141,7 @@ public class HandOfCards {
 		}	
 		else{
 			int u=0;
-			while(u+4<handCapacity){
+			while(u+4<HAND_CAPACITY){
 				if((hand[u].getFaceValue() == hand[u+1].getFaceValue()&&hand[u+1].getFaceValue()==hand[u+2].getFaceValue())&&hand[u+3].getFaceValue()==hand[u+4].getFaceValue()||(hand[u].getFaceValue() == hand[u+1].getFaceValue()&&hand[u+2].getFaceValue()==hand[u+3].getFaceValue())&&hand[u+3].getFaceValue()==hand[u+4].getFaceValue()){ //Array is sorted already so cards with same face value automatically beside each other. Meaning if the first and fourth or second and fifth values are the same there are 4 of a kind.
 					return true;
 				}
@@ -172,7 +173,7 @@ public class HandOfCards {
 		}
 		else{
 			int u=0;
-			while(u+2<handCapacity){
+			while(u+2<HAND_CAPACITY){
 				if(hand[u].getFaceValue() == hand[u+2].getFaceValue()){ //Compares card's face value to face value of card 2 indexes away from it in the hand
 					return true;
 				}
@@ -188,7 +189,7 @@ public class HandOfCards {
 		}
 		else{
 			int u=0, pairCounter=0;
-			while(u+1<handCapacity){
+			while(u+1<HAND_CAPACITY){
 				if(hand[u].getFaceValue() == hand[u+1].getFaceValue()){
 					pairCounter++;
 					}
@@ -208,7 +209,7 @@ public class HandOfCards {
 		}
 		else{
 			int u=0;
-			while(u+1<handCapacity){
+			while(u+1<HAND_CAPACITY){
 				if(hand[u].getFaceValue() == hand[u+1].getFaceValue()){
 					return true;
 				}
@@ -252,9 +253,9 @@ public class HandOfCards {
 		}
 		
 		else if(isFlush()){//To separate 2 flushes look at highest card in both flushes. If both have same high card, move to next highest. Formula = HandOfCards.FLUSH_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
-			int j=handCapacity;
+			int j=HAND_CAPACITY;
 			gameValue = HandOfCards.FLUSH_DEFAULT;
-			for(int i=0; i<handCapacity; i++){
+			for(int i=0; i<HAND_CAPACITY; i++){
 				gameValue += (int) pow(hand[i].getGameValue(), j);
 				j--;
 			}
@@ -290,7 +291,7 @@ public class HandOfCards {
 		
 		else if(isOnePair()){//Formula = HandOfCards.ONE_PAIR_DEFAULT + (game value of pair * 3)^4 + (game value highest non pair card)^3 + (game value of second lowest non pair card)^2 + game value of lowest non pair card
 			int u=0;
-			while(u+1<handCapacity){
+			while(u+1<HAND_CAPACITY){
 				if(hand[u].getGameValue() == hand[u+1].getGameValue()){//To separate 2 hands with the same one pair, you look at the highest card outside the pair. If these are the same you go to the next highest card outside the pair, if these are the same then the second highest outside the pair then if these are still the same the lowest card outside the pair. If all of these are the same then the pot is split.
 					gameValue = HandOfCards.ONE_PAIR_DEFAULT;
 					if(u+1==1){//This means that the pair is hand[FIRST_CARD_INDEX] & hand[SECOND_CARD_INDEX], so the highest to lowest non-pair values are, in descending order, hand[THIRD_CARD_INDEX], hand[FOURTH_CARD_INDEX] and hand[FIFTH_CARD_INDEX]
@@ -309,15 +310,23 @@ public class HandOfCards {
 			}
 		}
 		else if(isHighHand()){//Formula = HandOfCards.HIGH_HAND_DEFAULT+hand[0].getGameValue^5 + hand[1].getGameValue^4...
-			int j=handCapacity; //In the case two hands have the same high hands, the higher game value of the next highest card wins, if these are the same the next highest card's game value is compared if all card game values are the same in both hands, the pot is split.
+			int j=HAND_CAPACITY; //In the case two hands have the same high hands, the higher game value of the next highest card wins, if these are the same the next highest card's game value is compared if all card game values are the same in both hands, the pot is split.
 			gameValue = HandOfCards.HIGH_HAND_DEFAULT;
-			for(int i=0; i<handCapacity; i++){
+			for(int i=0; i<HAND_CAPACITY; i++){
 				gameValue += (int) pow(hand[i].getGameValue(), j);
 				j--;
 			}
 		}
 		
 		return gameValue;
+	}
+	
+	public int getDiscardProbability(int cardPosition){
+		if(cardPosition<0||cardPosition>=HAND_CAPACITY||isRoyalFlush()){//Tests that the passed card position belongs to a deck
+			return 0;
+		}
+		else
+			return 1;
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
@@ -331,303 +340,47 @@ public class HandOfCards {
 		comparisonArray[0] = ROYAL_FLUSH_DEFAULT; //As royal flush isn't tested, its default value is added to the comparison array
 		System.out.println("For testing, the program will now generate 2 instances of each type of hand, excluding royal flush, and determine a winner between them:");
 		
+		
+		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
-		System.out.println("\nTesting Straight Flush:");
+		System.out.println("\nTesting Royal Flush:");
 		while(!achieved){
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isStraightFlush()){
+			if(CardHand.isRoyalFlush()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+					System.out.println(CardHand.getDiscardProbability(0));
+					System.out.println(CardHand.getDiscardProbability(1));
+					System.out.println(CardHand.getDiscardProbability(2));
+					System.out.println(CardHand.getDiscardProbability(3));
+					System.out.println(CardHand.getDiscardProbability(4));
 				achieved=true;
 			}
 		}
 
 		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isStraightFlush()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}	
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
 		i++;
-		
-		//TESTS 2 FOUR OF A KINDS AGAINST EACH OTHER:
-		System.out.println("\nTesting Four Of A Kind:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isFourOfAKind()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
+	
+		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
+				System.out.println("\nTesting Straight Flush:");
+				while(!achieved){
+					CardDeck.reset();
+					CardHand = new HandOfCards(CardDeck);		
+					if(CardHand.isStraightFlush()){
+						System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+							System.out.println(CardHand.getDiscardProbability(0));
+							System.out.println(CardHand.getDiscardProbability(1));
+							System.out.println(CardHand.getDiscardProbability(2));
+							System.out.println(CardHand.getDiscardProbability(3));
+							System.out.println(CardHand.getDiscardProbability(4));				
+						achieved=true;
+					}
+				}
 
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isFourOfAKind()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
-		
-		//TESTS 2 FULL HOUSES AGAINST EACH OTHER:
-		System.out.println("\nTesting Full House:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isFullHouse()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isFullHouse()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved=false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
-		
-		//TESTS 2 FLUSHES AGAINST EACH OTHER:
-		System.out.println("\nTesting Flush:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isFlush()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
+				
+					System.out.println(CardHand.getDiscardProbability(-5));
+					System.out.println(CardHand.getDiscardProbability(8));
 
-			if(CardHand1.isFlush()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
 		
-		//TESTS 2 STRAIGHTS AGAINST EACH OTHER:
-		System.out.println("\nTesting Straight:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isStraight()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-
-			if(CardHand1.isStraight()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
-		
-		//TESTS 2 THREE OF A KINDS AGAINST EACH OTHER:
-		System.out.println("\nTesting Three Of A Kind:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isThreeOfAKind()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isThreeOfAKind()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
-		
-		//TESTS 2 TWO PAIRS AGAINST EACH OTHER:
-		System.out.println("\nTesting Two Pair:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isTwoPair()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isTwoPair()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
-		
-		//TESTS 2 ONE PAIRS AGAINST EACH OTHER:
-		System.out.println("\nTesting One Pair:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isOnePair()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isOnePair()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		achieved = false;
-		comparisonArray[i] = CardHand.getGameValue();
-		i++;
-		
-		//TESTS 2 HIGH HANDS AGAINST EACH OTHER:
-		System.out.println("\nTesting High Hand:");
-		while(!achieved){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isHighHand()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-				achieved=true;
-			}
-		}
-		achieved = false;
-		while(!achieved){
-			CardDeck.reset();
-			CardHand1 = new HandOfCards(CardDeck);
-			if(CardHand1.isHighHand()){
-				System.out.println("Hand 2: "+CardHand1.handString()+"\tGame value: "+CardHand1.getGameValue());
-				achieved=true;
-			}
-		}
-		if(CardHand.getGameValue()>CardHand1.getGameValue()){
-			System.out.println("Hand 1 wins!");
-		}
-		else if(CardHand.getGameValue()<CardHand1.getGameValue()){
-			System.out.println("Hand 2 wins!");
-		}
-		else{
-			System.out.println("Split Pot");
-		}
-		comparisonArray[i] = CardHand.getGameValue();
-		System.out.println("\nRoyal Flush > Straight Flush > Four of a Kind > Full House > Flush > Straight > Three of a Kind > Two Pair > One Pair > High Hand?");
-		while(j<i){//TESTS NO HAND OF LOWER VALUE RETURNS A HIGHER getGameValue VALUE THAN A HAND OF HIGHER VALUE
-			if(comparisonArray[j]>comparisonArray[j+1]){
-				j++;				
-			}
-			else
-				System.out.println("False. Game value order not in keeping with quality of hands.");
-		}
-		System.out.println("True");
 	}
 }
