@@ -321,6 +321,28 @@ public class HandOfCards {
 		return gameValue;
 	}
 	
+	private boolean isFourFlush(){//Returns true if the hand contains four cards of the same suit
+		int j = 0, sameSuitCounterFirstCard = 0, sameSuitCounterSecondCard = 0;
+		while(j<HAND_CAPACITY){//Checks if there are 3 other cards in the hand that are the same suit as the first card
+			if(hand[FIRST_CARD_INDEX].getSuit()==hand[j].getSuit()){
+				sameSuitCounterFirstCard++;
+			}
+			j++;
+		} 
+		j=0;
+		while(j<HAND_CAPACITY){//Can also be a four flush with 3 cards the same suit as the second card in the hand. Also have to check this
+			if(hand[SECOND_CARD_INDEX].getSuit()==hand[j].getSuit()){
+				sameSuitCounterSecondCard++;
+			}
+			j++;
+		}
+		if(sameSuitCounterFirstCard==4||sameSuitCounterSecondCard==4){
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	private int fourOfAKindDiscardProbability(int cardPosition){
 		if(cardPosition==HAND_CAPACITY-1&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()&&hand[cardPosition].getGameValue()<5){ //Tests if the game value of the non four of a kind card is less than 5, if it is, the probability is that it should most likely be discarded
 			return 90;
@@ -380,6 +402,14 @@ public class HandOfCards {
 			return 0;
 		
 	}
+	
+	private int highHandDiscardProbability(int cardPosition){
+		if(isFourFlush()){
+			return 100;
+		}
+		else
+			return 0;
+	}
 		
 	public int getDiscardProbability(int cardPosition){
 		if(cardPosition<0||cardPosition>=HAND_CAPACITY||isRoyalFlush()){//Tests that the passed card position belongs to a deck
@@ -409,10 +439,9 @@ public class HandOfCards {
 		else if(isOnePair()){
 			return onePairDiscardProbability(cardPosition);	
 		}
-		else if(isHighHand()){
-			return 1;
+		else{
+			return highHandDiscardProbability(cardPosition);
 		}
-			return 1;
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
@@ -429,25 +458,26 @@ public class HandOfCards {
 		
 		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
-		System.out.println("\nTesting Royal Flush:");
-		while(!achieved){
+		System.out.println("\nTesting High Hand:");
+		int discardProb=0;
+		while(discardProb!=100){
 			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);		
-			if(CardHand.isRoyalFlush()){
+			CardHand = new HandOfCards(CardDeck);				
+			if(CardHand.isHighHand()){
 				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
 					System.out.println(CardHand.getDiscardProbability(0));
 					System.out.println(CardHand.getDiscardProbability(1));
 					System.out.println(CardHand.getDiscardProbability(2));
 					System.out.println(CardHand.getDiscardProbability(3));
 					System.out.println(CardHand.getDiscardProbability(4));
-				achieved=true;
+				discardProb=CardHand.getDiscardProbability(0);
 			}
 		}
 
 		achieved = false;
 		i++;
 	
-		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
+		/*//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 				System.out.println("\nTesting Straight Flush:");
 				while(!achieved){
 					CardDeck.reset();
@@ -462,10 +492,10 @@ public class HandOfCards {
 						achieved=true;
 					}
 				}
-
+*/
 				
-					System.out.println(CardHand.getDiscardProbability(-5));
-					System.out.println(CardHand.getDiscardProbability(8));
+				//	System.out.println(CardHand.getDiscardProbability(-5));
+				//	System.out.println(CardHand.getDiscardProbability(8));
 
 		
 	}
