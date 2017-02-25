@@ -424,7 +424,7 @@ public class HandOfCards {
 	}
 	
 	private int twoPairDiscardProbability(int cardPosition){//Probability of improving a 2 pair to a full house is 10.75/1 = 9/100. Return 9 if hand[cardPosition] is not part of either pair
-		if((cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue())||(cardPosition==THIRD_CARD_INDEX&&(hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()||hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()))||(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue())){
+		if(hand[cardPosition].getGameValue()!=hand[SECOND_CARD_INDEX].getGameValue()&&hand[cardPosition].getGameValue()!=hand[FOURTH_CARD_INDEX].getGameValue()){//If this is the case, card[handPosition] is not part of either pairs
 			return 9;
 		}
 		else
@@ -442,7 +442,25 @@ public class HandOfCards {
 	
 	private int highHandDiscardProbability(int cardPosition){
 		if(isFourFlush()){//Probability of improving a 4 flush high hand to a flush is 4.2/1 = 24/100.
-			return 24;
+			if(cardPosition==FIRST_CARD_INDEX){
+				if((hand[cardPosition].getSuit()!=hand[cardPosition+1].getSuit()&&hand[cardPosition].getSuit()!=hand[cardPosition+2].getSuit())){
+					return 24;
+				}
+				else
+					return 0;
+			}
+			else if(cardPosition==FIFTH_CARD_INDEX){
+				if(hand[cardPosition].getSuit()!=hand[cardPosition-1].getSuit()&&hand[cardPosition].getSuit()!=hand[cardPosition-2].getSuit()){
+					return 24;
+				}
+				else
+					return 0;	
+			}
+			else if((hand[cardPosition].getSuit()!=hand[cardPosition-1].getSuit())&&(hand[cardPosition].getSuit()!=hand[cardPosition+1].getSuit())){
+				return 24;
+			}
+			else
+				return 0;
 		}
 		else if(isOpenEndedStraight()){//Probability of improving an open ended straight high hand to a straight is 5/1 = 20/100
 			return 20;
@@ -501,45 +519,25 @@ public class HandOfCards {
 		
 		
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
-		System.out.println("\nTesting High Hand:");
-		int discardProb=0;
-		while(discardProb!=9){
-			CardDeck.reset();
-			CardHand = new HandOfCards(CardDeck);				
-			if(CardHand.isHighHand()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-					System.out.println(CardHand.getDiscardProbability(0));
-					System.out.println(CardHand.getDiscardProbability(1));
-					System.out.println(CardHand.getDiscardProbability(2));
-					System.out.println(CardHand.getDiscardProbability(3));
-					System.out.println(CardHand.getDiscardProbability(4));
-				discardProb=CardHand.getDiscardProbability(0);
+			System.out.println("\nTesting High Hand:");
+			int discardProb=0;
+			while(discardProb!=24){
+				CardDeck.reset();
+				CardHand = new HandOfCards(CardDeck);				
+				if(CardHand.isHighHand()){
+					System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+						System.out.println(CardHand.getDiscardProbability(0));
+						System.out.println(CardHand.getDiscardProbability(1));
+						System.out.println(CardHand.getDiscardProbability(2));
+						System.out.println(CardHand.getDiscardProbability(3));
+						System.out.println(CardHand.getDiscardProbability(4));
+						discardProb = CardHand.getDiscardProbability(0)+CardHand.getDiscardProbability(1)+CardHand.getDiscardProbability(2)+CardHand.getDiscardProbability(3)+CardHand.getDiscardProbability(4);				
+						}
 			}
-		}
 
-		achieved = false;
-		i++;
-	
-		/*//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
-				System.out.println("\nTesting Straight Flush:");
-				while(!achieved){
-					CardDeck.reset();
-					CardHand = new HandOfCards(CardDeck);		
-					if(CardHand.isStraightFlush()){
-						System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
-							System.out.println(CardHand.getDiscardProbability(0));
-							System.out.println(CardHand.getDiscardProbability(1));
-							System.out.println(CardHand.getDiscardProbability(2));
-							System.out.println(CardHand.getDiscardProbability(3));
-							System.out.println(CardHand.getDiscardProbability(4));				
-						achieved=true;
-					}
-				}
-*/
-				
-				//	System.out.println(CardHand.getDiscardProbability(-5));
-				//	System.out.println(CardHand.getDiscardProbability(8));
-
-		
+			achieved = false;
+			i++;
 	}
+
+	
 }
