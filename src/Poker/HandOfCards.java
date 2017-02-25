@@ -365,8 +365,11 @@ public class HandOfCards {
 			return false;
 	}
 	
-	private boolean isInsideStraight(){
+	private boolean isInsideStraight(){//Determines if there is an inside straight present in a high hand, eg 9,7,6,5,3, it needs one card in the middle, 5 to complete a straight
 		int j=1, straightCounterSpecialCase=0;
+		if(hand[FIRST_CARD_INDEX].getGameValue()-hand[FOURTH_CARD_INDEX].getGameValue()==4){
+			return true;
+		}
 		while(j<HAND_CAPACITY-1){//Accounts for the special case where a hand has A,x,4,3,2 which is the only inside straight possible because any other one would contain one pair
 			if(hand[FIRST_CARD_INDEX].getFaceValue()==hand[HAND_CAPACITY-j].getGameValue()-j){
 				straightCounterSpecialCase++;
@@ -533,7 +536,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 			System.out.println("\nTesting High Hand:");
 			int discardProb=0;
-			while(!achieved){
+			while(discardProb!=9){
 				CardDeck.reset();
 				CardHand = new HandOfCards(CardDeck);				
 				if(CardHand.isHighHand()){
@@ -543,7 +546,8 @@ public class HandOfCards {
 						System.out.println(CardHand.getDiscardProbability(2));
 						System.out.println(CardHand.getDiscardProbability(3));
 						System.out.println(CardHand.getDiscardProbability(4));
-						achieved=true;						
+						discardProb = CardHand.getDiscardProbability(0);
+						//achieved=true;						
 						}
 			}
 
