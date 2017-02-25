@@ -344,34 +344,42 @@ public class HandOfCards {
 	}
 	
 	private boolean isOpenEndedStraight(){//Returns true if the hand contains an open ended straight, meaning 4 cards in a row of a straight missing a fifth card at either the beginning or end, eg 3,4,5,6
-		int j=1, straightCounterFirstCard = 0, straightCounterSecondCard = 0, straightCounterSpecialCase = 0;
+		int j=1, straightCounterFirstCard = 0, straightCounterSecondCard = 0;
 		while(j<HAND_CAPACITY-1){
-			if(hand[FIRST_CARD_INDEX].getGameValue()==hand[j].getGameValue()+j){
+			if(hand[FIRST_CARD_INDEX].getGameValue()==hand[j].getGameValue()+j){//Checks if the first card has three other cards that's game values are sequentially after it, e.g. 6,5,4,3,x
 				straightCounterFirstCard++;
 			}
 			j++;
 		}
 		j=2;
-		while(j<HAND_CAPACITY){
+		while(j<HAND_CAPACITY){//Checks if the second card has three other cards that's game values are sequentially after it e.g. x,5,4,3,2
 			if(hand[SECOND_CARD_INDEX].getGameValue()==hand[j].getGameValue()+(j-1)){
 				straightCounterSecondCard++;
 			}
 			j++;
 		}
-		j=1;
-		while(j<HAND_CAPACITY-1){
+		if(straightCounterFirstCard==3||straightCounterSecondCard==3){
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	private boolean isInsideStraight(){
+		int j=1, straightCounterSpecialCase=0;
+		while(j<HAND_CAPACITY-1){//Accounts for the special case where a hand has A,x,4,3,2 which is the only inside straight possible because any other one would contain one pair
 			if(hand[FIRST_CARD_INDEX].getFaceValue()==hand[HAND_CAPACITY-j].getGameValue()-j){
 				straightCounterSpecialCase++;
 			}
 			j++;
 		}
-		if(straightCounterFirstCard==3||straightCounterSecondCard==3||straightCounterSpecialCase==3){
+		if(straightCounterSpecialCase==3){
 			return true;
 		}
 		else
 			return false;
-		
 	}
+	
 	private int fourOfAKindDiscardProbability(int cardPosition){
 		if(cardPosition==HAND_CAPACITY-1&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()&&hand[cardPosition].getGameValue()<5){ //Tests if the game value of the non four of a kind card is less than 5, if it is, the probability is that it should most likely be discarded
 			return 90;
@@ -439,6 +447,9 @@ public class HandOfCards {
 		else if(isOpenEndedStraight()){//Probability of improving an open ended straight high hand to a straight is 5/1 = 20/100
 			return 20;
 		}
+		else if(isInsideStraight()){
+			return 9;
+		}
 		else
 			return 0;
 	}
@@ -492,7 +503,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 		System.out.println("\nTesting High Hand:");
 		int discardProb=0;
-		while(discardProb!=20){
+		while(discardProb!=9){
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isHighHand()){
