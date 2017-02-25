@@ -462,8 +462,16 @@ public class HandOfCards {
 			else
 				return 0;
 		}
+		
 		else if(isOpenEndedStraight()){//Probability of improving an open ended straight high hand to a straight is 5/1 = 20/100
-			return 20;
+			if(cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()+1){
+				return 20;
+			}
+			else if(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()-1){
+				return 20;
+			}
+			else
+				return 0;
 		}
 		else if(isInsideStraight()){
 			return 9;
@@ -521,7 +529,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 			System.out.println("\nTesting High Hand:");
 			int discardProb=0;
-			while(discardProb!=24){
+			while(discardProb!=20){
 				CardDeck.reset();
 				CardHand = new HandOfCards(CardDeck);				
 				if(CardHand.isHighHand()){
