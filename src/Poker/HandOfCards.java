@@ -344,7 +344,7 @@ public class HandOfCards {
 	}
 	
 	private boolean isOpenEndedStraight(){//Returns true if the hand contains an open ended straight, meaning 4 cards in a row of a straight missing a fifth card at either the beginning or end, eg 3,4,5,6
-		int j=1, straightCounterFirstCard = 0, straightCounterSecondCard = 0;
+		int j=1, straightCounterFirstCard = 0, straightCounterSecondCard = 0, straightCounterSpecialCase = 0;
 		while(j<HAND_CAPACITY-1){
 			if(hand[FIRST_CARD_INDEX].getGameValue()==hand[j].getGameValue()+j){
 				straightCounterFirstCard++;
@@ -358,7 +358,14 @@ public class HandOfCards {
 			}
 			j++;
 		}
-		if(straightCounterFirstCard==3||straightCounterSecondCard==3){
+		j=1;
+		while(j<HAND_CAPACITY-1){
+			if(hand[FIRST_CARD_INDEX].getFaceValue()==hand[HAND_CAPACITY-j].getGameValue()-j){
+				straightCounterSpecialCase++;
+			}
+			j++;
+		}
+		if(straightCounterFirstCard==3||straightCounterSecondCard==3||straightCounterSpecialCase==3){
 			return true;
 		}
 		else
