@@ -356,64 +356,29 @@ public class HandOfCards {
 			return 5;
 	}
 	
-	private int threeOfAKindDiscardProbability(int cardPosition){
-		if((cardPosition>0&&hand[cardPosition-1].getGameValue()==hand[cardPosition+1].getGameValue())||(hand[cardPosition].getGameValue()==hand[cardPosition+2].getGameValue())||(cardPosition==HAND_CAPACITY-1&&hand[cardPosition]==hand[cardPosition-2])){//Means the card at cardPosition is part of the three of a kind and should most likely not be traded
-			return 6;
-		}
-		else if (hand[cardPosition].getGameValue()<5){ //If one of the non three of a kind cards has game value less than 5 should most likely be traded
-			return 90;
-		}
-		else if(hand[cardPosition].getGameValue()>9){
-			return 60;
+	private int threeOfAKindDiscardProbability(int cardPosition){//Probability of improving a threeOfAKind to a fourOfAKind or full house is 8.7/1 = 11/100. Return 11 if hand[cardPosition] is not part of the three of a kind.
+		if(hand[cardPosition].getGameValue()!=hand[THIRD_CARD_INDEX].getGameValue()){//The third card index card is guaranteed to be part of the three of a kind. Checks if hand[cardPosition] is not part of the three of a kind.
+			return 11;
 		}
 		else
-			return 75;
+			return 0;
 	}
 	
-	private int twoPairDiscardProbability(int cardPosition){
-		if(hand[cardPosition].getGameValue()==hand[SECOND_CARD_INDEX].getGameValue()&&hand[cardPosition].getGameValue()<6){//Means the hand is part of the higher pair and its game value is less than 6
-			return 15;
-		}
-		else if(hand[cardPosition].getGameValue()==hand[SECOND_CARD_INDEX].getGameValue()&&hand[cardPosition].getGameValue()>=6){//Means the hand is part of the higher pair and its game value is greater than or equal to 6
-			return 7;
-		}
-		else if(hand[cardPosition].getGameValue()==hand[FOURTH_CARD_INDEX].getGameValue()&&hand[cardPosition].getGameValue()<5){//Means the hand is part of the lower pair and its game value is less than 6
-			return 20;
-		}
-		else if(hand[cardPosition].getGameValue()==hand[FOURTH_CARD_INDEX].getGameValue()&&hand[cardPosition].getGameValue()>=5){//Means the hand is part of the lower pair and its game value is greater than or equal to 6
-			return 8;
-		}
-		else if(hand[cardPosition].getGameValue()<6){//Means the card at cardPosition is not in either pair and has a game value of less than 6
-			return 80;
-		}
-		else if(hand[cardPosition].getGameValue()>9){//Means the card at cardPosition is not in either pair and has a game value of greater than 9
-			return 25;
+	private int twoPairDiscardProbability(int cardPosition){//Probability of improving a 2 pair to a full house is 10.75/1 = 9/100. Return 9 if hand[cardPosition] is not part of either pair
+		if((cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue())||(cardPosition==THIRD_CARD_INDEX&&(hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()||hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()))||(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue())){
+			return 9;
 		}
 		else
-			return 40;	
+			return 0;
 	}
 	
-	private int onePairDiscardProbability(int cardPosition){
-		if((cardPosition<HAND_CAPACITY-1&&cardPosition>0&&hand[cardPosition].getGameValue()==hand[cardPosition+1].getGameValue()||hand[cardPosition].getGameValue()==hand[cardPosition-1].getGameValue())||(cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()==hand[cardPosition+1].getGameValue())||(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()==hand[cardPosition-1].getGameValue())){//Checks if the card at cardPosition is part of the pair
-			if(hand[cardPosition].getGameValue()<6){
-				return 30;
-			}
-			else if(hand[cardPosition].getGameValue()>9){
-				return 20;
-			}
-			else return 25;
+	private int onePairDiscardProbability(int cardPosition){//Probability of improving a one pair is 2.5/1 = 40/100. If the card is not part of the pair, return 40.
+		if((cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue())||((hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()||hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()))||(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue())){//Checks that hand[cardPosition] isn't part of the pair
+			return 40;
 		}
-		else{//Means the card is not part of the pair
-			if(hand[cardPosition].getGameValue()<6){
-				return 90;
-			}
-			else if(hand[cardPosition].getGameValue()>9){
-				return 80;
-			}
-			else 
-				return 85;
-
-		}
+		else//Means the card is part of the pair
+			return 0;
+		
 	}
 		
 	public int getDiscardProbability(int cardPosition){
