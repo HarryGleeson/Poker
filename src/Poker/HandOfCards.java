@@ -343,6 +343,28 @@ public class HandOfCards {
 			return false;
 	}
 	
+	private boolean isOpenEndedStraight(){//Returns true if the hand contains an open ended straight, meaning 4 cards in a row of a straight missing a fifth card at either the beginning or end, eg 3,4,5,6
+		int j=1, straightCounterFirstCard = 0, straightCounterSecondCard = 0;
+		while(j<HAND_CAPACITY-1){
+			if(hand[FIRST_CARD_INDEX].getGameValue()==hand[j].getGameValue()+j){
+				straightCounterFirstCard++;
+			}
+			j++;
+		}
+		j=2;
+		while(j<HAND_CAPACITY){
+			if(hand[SECOND_CARD_INDEX].getGameValue()==hand[j].getGameValue()+(j-1)){
+				straightCounterSecondCard++;
+			}
+			j++;
+		}
+		if(straightCounterFirstCard==3||straightCounterSecondCard==3){
+			return true;
+		}
+		else
+			return false;
+		
+	}
 	private int fourOfAKindDiscardProbability(int cardPosition){
 		if(cardPosition==HAND_CAPACITY-1&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()&&hand[cardPosition].getGameValue()<5){ //Tests if the game value of the non four of a kind card is less than 5, if it is, the probability is that it should most likely be discarded
 			return 90;
@@ -404,8 +426,11 @@ public class HandOfCards {
 	}
 	
 	private int highHandDiscardProbability(int cardPosition){
-		if(isFourFlush()){
-			return 100;
+		if(isFourFlush()){//Probability of improving a 4 flush high hand to a flush is 4.2/1 = 24/100.
+			return 24;
+		}
+		else if(isOpenEndedStraight()){//Probability of improving an open ended straight high hand to a straight is 5/1 = 20/100
+			return 20;
 		}
 		else
 			return 0;
@@ -460,7 +485,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 		System.out.println("\nTesting High Hand:");
 		int discardProb=0;
-		while(discardProb!=100){
+		while(discardProb!=20){
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isHighHand()){
