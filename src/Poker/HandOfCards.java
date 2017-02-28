@@ -370,7 +370,10 @@ public class HandOfCards {
 		if(hand[FIRST_CARD_INDEX].getGameValue()-hand[FOURTH_CARD_INDEX].getGameValue()==4){
 			return true;
 		}
-		while(j<HAND_CAPACITY-1){//Accounts for the special case where a hand has A,x,4,3,2 which is the only inside straight possible because any other one would contain one pair
+		else if(hand[SECOND_CARD_INDEX].getGameValue()-hand[FIFTH_CARD_INDEX].getGameValue()==4){
+			return true;
+		}
+		while(j<FIFTH_CARD_INDEX){//Accounts for the special case where a hand has A,x,4,3,2 which is the only inside straight possible because any other one would contain one pair
 			if(hand[FIRST_CARD_INDEX].getFaceValue()==hand[HAND_CAPACITY-j].getGameValue()-j){
 				straightCounterSpecialCase++;
 			}
@@ -478,7 +481,26 @@ public class HandOfCards {
 		}
 		else if(isInsideStraight()){
 			if(cardPosition==SECOND_CARD_INDEX){
-				return 9;
+				if(hand[cardPosition-1].getFaceValue()==hand[cardPosition+3].getFaceValue()-1&&hand[cardPosition-1].getFaceValue()==hand[cardPosition+2].getFaceValue()-2){//Accounts for special case A,x,4,3,2 where the second card returns a probability of 9 to be swapped
+					return 9;
+				}
+				else 
+					return 0;
+			}
+			
+			else if(cardPosition==FIRST_CARD_INDEX){
+				if(hand[cardPosition].getFaceValue()!=hand[cardPosition+4].getFaceValue()-1&&hand[cardPosition].getGameValue()-hand[cardPosition+2].getGameValue()>3){
+					return 9;
+				}
+				else
+					return 0;
+			}
+			else if(cardPosition==FIFTH_CARD_INDEX){
+				if(hand[cardPosition].getFaceValue()!=hand[cardPosition-4].getFaceValue()+1&&hand[cardPosition-2].getGameValue()-hand[cardPosition].getGameValue()>3){
+					return 9;
+				}
+				else
+					return 0;
 			}
 			else
 				return 0;
@@ -536,7 +558,7 @@ public class HandOfCards {
 		//TESTS 2 STRAIGHT FLUSHES AGAINST EACH OTHER:
 			System.out.println("\nTesting High Hand:");
 			int discardProb=0;
-			while(discardProb!=9){
+			while(discardProb!=9&&discardProb!=18&&discardProb!=27){
 				CardDeck.reset();
 				CardHand = new HandOfCards(CardDeck);				
 				if(CardHand.isHighHand()){
@@ -546,7 +568,7 @@ public class HandOfCards {
 						System.out.println(CardHand.getDiscardProbability(2));
 						System.out.println(CardHand.getDiscardProbability(3));
 						System.out.println(CardHand.getDiscardProbability(4));
-						discardProb = CardHand.getDiscardProbability(0);
+						discardProb = CardHand.getDiscardProbability(1)+CardHand.getDiscardProbability(0)+CardHand.getDiscardProbability(4);
 						//achieved=true;						
 						}
 			}
