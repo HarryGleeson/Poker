@@ -403,28 +403,28 @@ public class HandOfCards {
 	}
 	
 	private int onePairDiscardProbability(int cardPosition){//Probability of improving a one pair is 2.5/1 = 40/100. If the card is not part of the pair, return 40.
-		if(cardPosition==FIRST_CARD_INDEX){
+		if(cardPosition==FIRST_CARD_INDEX){//Determines whether or not the first card in the hand belongs to the pair by comparing its game value to that of the next card in the hand
 			if(hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()){
 				return 40;
 			}
 			else
 				return 0;
 		}
-		else if(cardPosition==FIFTH_CARD_INDEX){
+		else if(cardPosition==FIFTH_CARD_INDEX){//Determines whether or not the last card in the hand belongs to the pair by comparing its game value to that of the previous card in the hand
 			if(hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()){
 				return 40;	
 			}
 			else
 				return 0;
 		}
-		else if((hand[cardPosition].getGameValue()==hand[cardPosition+1].getGameValue())||(hand[cardPosition].getGameValue()==hand[cardPosition-1].getGameValue())){//Checks that hand[cardPosition] isn't part of the pair
+		else if((hand[cardPosition].getGameValue()==hand[cardPosition+1].getGameValue())||(hand[cardPosition].getGameValue()==hand[cardPosition-1].getGameValue())){//If the card is not the first or last card, determines if the card is in the pair by comparing its game value to that of the cards either side of it in the hand
 			return 0;
 		}
 		else//Means the card is part of the pair
 			return 40;		
 	}
 	
-	private int highHandDiscardProbability(int cardPosition){
+	private int highHandDiscardProbability(int cardPosition){//3 potential probabilities of improving a high hand, either it contains a four flush, an open ended straight or an inside straight. Each has its own probability 
 		if(isFourFlush()){//Probability of improving a 4 flush high hand to a flush is 4.2/1 = 24/100.
 			if(cardPosition==FIRST_CARD_INDEX){//Determines if the non flush card is the first card
 				if((hand[cardPosition].getSuit()!=hand[cardPosition+1].getSuit()&&hand[cardPosition].getSuit()!=hand[cardPosition+2].getSuit())){
@@ -440,41 +440,41 @@ public class HandOfCards {
 				else
 					return 0;	
 			}
-			else if((hand[cardPosition].getSuit()!=hand[cardPosition-1].getSuit())&&(hand[cardPosition].getSuit()!=hand[cardPosition+1].getSuit())){//Determines if the non flush card is the between the first and fifth cards
+			else if((hand[cardPosition].getSuit()!=hand[cardPosition-1].getSuit())&&(hand[cardPosition].getSuit()!=hand[cardPosition+1].getSuit())){//Determines if a card is the between the first and fifth cards os part of the flush
 				return 24;
 			}
 			else
 				return 0;
 		}
 		
-		else if(isOpenEndedStraight()){//Probability of improving an open ended straight high hand to a straight is 5/1 = 20/100
-			if(cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()+1){//Determines if card[handPosition] is at the start of the open ended straight
+		else if(isOpenEndedStraight()){//Probability of improving an open ended straight high hand to a straight is 5/1 = 20/100. Non straight card must be either the first or last card in the hand
+			if(cardPosition==FIRST_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition+1].getGameValue()+1){//Determines if the first card is the card not part of the open ended straight
 				return 20;
 			}
-			else if(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()-1){
+			else if(cardPosition==FIFTH_CARD_INDEX&&hand[cardPosition].getGameValue()!=hand[cardPosition-1].getGameValue()-1){//Determines if the last card in the hand is not part of the open ended straight
 				return 20;
 			}
 			else
 				return 0;
 		}
-		else if(isInsideStraight()){//Probability of improving an inside straight high hand to a straight is 11/1 = 9/100
-			if(cardPosition==SECOND_CARD_INDEX){
-				if(hand[cardPosition-1].getFaceValue()==hand[cardPosition+3].getFaceValue()-1&&hand[cardPosition-1].getFaceValue()==hand[cardPosition+2].getFaceValue()-2){//Accounts for special case A,x,4,3,2 where the second card returns a probability of 9 to be swapped
+		else if(isInsideStraight()){//Probability of improving an inside straight high hand to a straight is 11/1 = 9/100. Non straight card must be either the first or last card in the hand apart from the special case where it must be the second card in the hand.
+			if(cardPosition==SECOND_CARD_INDEX){//Accounts for special case A,x,4,3,2 where the second card in the hand is the non straight card
+				if(hand[cardPosition-1].getFaceValue()==hand[cardPosition+3].getFaceValue()-1&&hand[cardPosition-1].getFaceValue()==hand[cardPosition+2].getFaceValue()-2){
 					return 9;
 				}
 				else 
 					return 0;
 			}
 			
-			else if(cardPosition==FIRST_CARD_INDEX){
-				if(/*hand[cardPosition].getFaceValue()!=hand[cardPosition+4].getFaceValue()-1&&*/hand[cardPosition].getGameValue()-hand[cardPosition+2].getGameValue()>3||hand[cardPosition].getGameValue()-hand[cardPosition+4].getGameValue()<6){
+			else if(cardPosition==FIRST_CARD_INDEX){//Determines if the non straight card is the first card in the hand by comparing its game value to the other cards in the hand
+				if(hand[cardPosition].getGameValue()-hand[cardPosition+2].getGameValue()>3||hand[cardPosition].getGameValue()-hand[cardPosition+4].getGameValue()<6){
 					return 9;
 				}
 				else
 					return 0;
 			}
-			else if(cardPosition==FIFTH_CARD_INDEX){
-				if(/*hand[cardPosition].getFaceValue()!=hand[cardPosition-4].getFaceValue()+1&&*/hand[cardPosition-2].getGameValue()-hand[cardPosition].getGameValue()>3||hand[cardPosition-4].getGameValue()-hand[cardPosition].getGameValue()<6){
+			else if(cardPosition==FIFTH_CARD_INDEX){//Determines if the non straight card is the last card in the hand by comparing its game value to the other cards in the hand
+				if(hand[cardPosition-2].getGameValue()-hand[cardPosition].getGameValue()>3||hand[cardPosition-4].getGameValue()-hand[cardPosition].getGameValue()<6){
 					return 9;
 				}
 				else
@@ -488,7 +488,10 @@ public class HandOfCards {
 	}
 		
 	public int getDiscardProbability(int cardPosition){
-		if(cardPosition<0||cardPosition>=HAND_CAPACITY||isRoyalFlush()){//Tests that the passed card position belongs to a deck
+		if(cardPosition<0||cardPosition>=HAND_CAPACITY){//Tests that the passed card position belongs to a deck
+			return 0;
+		}
+		else if(isRoyalFlush()){
 			return 0;
 		}
 		else if(isStraightFlush()){
@@ -522,12 +525,11 @@ public class HandOfCards {
 			return 0;
 	}
 	
-	public static void main(String[] args){ //The main method generates a hand of cards, prints out the toString() representation of each card and then the best possible poker hand it belongs to is printed
-	//BELOW GENERATES 2 OF THE SAME CATEGORY OF HAND FOR ALL POSSIBLE CATEGORISATIONS OF HANDS AND COMPARES THEM TO TEST THE getGameValue method, EXCLUDING THE ROYAL FLUSH AS IT TAKES A LONG TIME TO GENERATE AND WILL ALWAYS RESULT IN A DRAW AND A SPLIT POT. 
+	public static void main(String[] args){ //The main method generates a hand of cards for each method to be tested, prints out the toString() representation of each card and then prints the probability for improvement upon discard for each card
 		boolean achieved = false;
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
-		System.out.println("For testing, the program will now generate an instances of each type of hand, including a broken flush and both variations of broken straight, and determine the discard probability for each card:");	
+		System.out.println("For testing, the program will now generate an instances of each type of hand that has a possibility of improving, including a broken flush and both variations of broken straight, and determine the discard probability for each card:");	
 		
 		achieved = false;
 		System.out.println("\nTesting Three Of A Kind:");
@@ -535,7 +537,7 @@ public class HandOfCards {
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isThreeOfAKind()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+				System.out.println("Hand: "+CardHand.handString());
 				System.out.println(CardHand.getDiscardProbability(0));
 				System.out.println(CardHand.getDiscardProbability(1));
 				System.out.println(CardHand.getDiscardProbability(2));
@@ -551,7 +553,7 @@ public class HandOfCards {
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isTwoPair()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+				System.out.println("Hand: "+CardHand.handString());
 				System.out.println(CardHand.getDiscardProbability(0));
 				System.out.println(CardHand.getDiscardProbability(1));
 				System.out.println(CardHand.getDiscardProbability(2));
@@ -567,7 +569,7 @@ public class HandOfCards {
 			CardDeck.reset();
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isOnePair()){
-				System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+				System.out.println("Hand: "+CardHand.handString());
 				System.out.println(CardHand.getDiscardProbability(0));
 				System.out.println(CardHand.getDiscardProbability(1));
 				System.out.println(CardHand.getDiscardProbability(2));
@@ -584,7 +586,7 @@ public class HandOfCards {
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isHighHand()){
 				if (CardHand.isFourFlush()){
-					System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+					System.out.println("Hand: "+CardHand.handString());
 					System.out.println(CardHand.getDiscardProbability(0));
 					System.out.println(CardHand.getDiscardProbability(1));
 					System.out.println(CardHand.getDiscardProbability(2));
@@ -602,7 +604,7 @@ public class HandOfCards {
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isHighHand()){
 				if (CardHand.isOpenEndedStraight()&&!CardHand.isFourFlush()){
-					System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+					System.out.println("Hand: "+CardHand.handString());
 					System.out.println(CardHand.getDiscardProbability(0));
 					System.out.println(CardHand.getDiscardProbability(1));
 					System.out.println(CardHand.getDiscardProbability(2));
@@ -620,7 +622,7 @@ public class HandOfCards {
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isHighHand()){	
 				if (CardHand.isInsideStraight()&&!CardHand.isOpenEndedStraight()&&!CardHand.isFourFlush()){
-					System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+					System.out.println("Hand: "+CardHand.handString());
 					System.out.println(CardHand.getDiscardProbability(0));
 					System.out.println(CardHand.getDiscardProbability(1));
 					System.out.println(CardHand.getDiscardProbability(2));
@@ -638,7 +640,7 @@ public class HandOfCards {
 			CardHand = new HandOfCards(CardDeck);				
 			if(CardHand.isHighHand()){
 				if (!CardHand.isOpenEndedStraight()&&!CardHand.isInsideStraight()&&!CardHand.isFourFlush()){
-					System.out.println("Hand 1: "+CardHand.handString()+"\tGame value: "+CardHand.getGameValue());
+					System.out.println("Hand: "+CardHand.handString());
 					System.out.println(CardHand.getDiscardProbability(0));
 					System.out.println(CardHand.getDiscardProbability(1));
 					System.out.println(CardHand.getDiscardProbability(2));
