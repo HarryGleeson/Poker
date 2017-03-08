@@ -78,7 +78,7 @@ public class HandOfCards {
 		return true;
 	}
 	
-	private void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value. 
+	public void sort(){ //Uses a Bubble sort to sort the cards in descending order according to their game value. 
 		for (int i = 0; i < HAND_CAPACITY-1; i++){
 			for(int j=1;  j < HAND_CAPACITY-i;  j++ ){
                 if ( hand[j-1].getGameValue() < hand[j].getGameValue()){
@@ -483,8 +483,11 @@ public class HandOfCards {
 			else
 				return 0;
 		}
-		else //Otherwise, the hand contains nothing of use. Return 100 because chances are if you discard a card you could end up with a pair or an improvement on what you have
-			return 100;
+		else //Otherwise, the hand contains nothing of use. Return 100 for the lowest face valued 3 cards because chances are if you discard a card you could end up with a pair or an improvement on what you have
+			if(cardPosition>SECOND_CARD_INDEX){
+				return 100;
+			}
+			return 0;
 	}
 		
 	public int getDiscardProbability(int cardPosition){
@@ -525,12 +528,15 @@ public class HandOfCards {
 			return 0;
 	}
 	
+	public void discardCard(int cardIndex){
+		hand[cardIndex] = deck.dealNext();
+	}
+	
 	public static void main(String[] args){ //The main method generates a hand of cards for each method to be tested, prints out the toString() representation of each card and then prints the probability for improvement upon discard for each card
 		boolean achieved = false;
 		DeckOfCards CardDeck = new DeckOfCards();
 		HandOfCards CardHand = new HandOfCards(CardDeck);
 		System.out.println("For testing, the program will now generate an instances of each type of hand that has a possibility of improving, including a broken flush and both variations of broken straight, and determine the discard probability for each card:");	
-		
 		achieved = false;
 		System.out.println("\nTesting Three Of A Kind:");
 		while(!achieved){
