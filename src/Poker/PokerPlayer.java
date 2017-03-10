@@ -20,14 +20,12 @@ public class PokerPlayer {
 		int discardProbability = 0;
 		for(int i = 0; i<HandOfCards.HAND_CAPACITY; i++){
 			discardProbability = hand.getDiscardProbability(i);
-			System.out.println("Discard Probability: "+discardProbability);
 			if(discardProbability == 100){
 				hand.discardCard(i); 
 				discardNumber++;
 			}
 			else if(discardProbability!=0){
 				int random = rand1.nextInt(101); //Generates a random number between 1 and 100, if the number is less than the probability, it is to be discarded, if it is, it is not to be discarded.
-				System.out.println("Random = "+random);
 					if(random<=discardProbability){
 						hand.discardCard(i);
 						discardNumber++;
@@ -35,6 +33,7 @@ public class PokerPlayer {
 			}
 
 		}
+		
 		return discardNumber;
 	}
 	
@@ -43,13 +42,24 @@ public class PokerPlayer {
 		
 	}
 	public static void main(String[] args) {
+		int loopCounter = 0;
+		int improvedHandCounter = 0;
+		while(loopCounter<1000){
 		 cardDeck.reset();
 		 PokerPlayer player = new PokerPlayer(cardDeck);
+		 int initialGameValue = player.hand.getGameValue();
 		 int discardNumber = player.discard();
 		 hand.sort();
-		 System.out.println(discardNumber);
-		 System.out.println(hand.handString());
-		 
+		 int postSwapGameValue = hand.getGameValue();
+		 if(postSwapGameValue>initialGameValue){
+			 
+			 improvedHandCounter++;
+			 System.out.println("Hand Improved: "+hand.handString());
+
+		 }
+		loopCounter++;
+		}
+	System.out.println("Hand improved "+improvedHandCounter+" times out of 1000.");	 
 	}
 
 }
