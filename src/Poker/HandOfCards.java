@@ -528,8 +528,8 @@ public class HandOfCards {
 			return 0;
 	}
 	
-	public void discardCard(int cardIndex){
-		hand[cardIndex] = deck.dealNext();
+	public void discardCard(int cardIndex, PlayingCard dealNext){
+		hand[cardIndex] = dealNext;
 	}
 	
 	public static void main(String[] args){ //The main method generates a hand of cards for each method to be tested, prints out the toString() representation of each card and then prints the probability for improvement upon discard for each card
