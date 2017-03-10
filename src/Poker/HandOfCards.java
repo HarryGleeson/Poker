@@ -528,7 +528,7 @@ public class HandOfCards {
 			return 0;
 	}
 	
-	public void discardCard(int cardIndex, PlayingCard dealNext){
+	public void discardCard(int cardIndex, PlayingCard dealNext){ //New method used to replace card in the hand at index cardIndex with Playing Card dealNext
 		hand[cardIndex] = dealNext;
 	}
 	
